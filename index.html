@@ -205,10 +205,35 @@
     }
   }
 
+  .hero { display: flex; flex-direction: column; }
+  .thread { order: -1; }
+  .duo { display: flex; flex-direction: column; gap: 56px; }
+  .signup-intro p { color: var(--mist); margin: -12px 0 28px; }
+
   @media (min-width: 720px) {
     .hero { padding-block: 64px 80px; }
     section { padding: 72px 0; }
     .interest { grid-template-columns: 220px 1fr; gap: 24px; align-items: baseline; }
+  }
+
+  @media (min-width: 1000px) {
+    .wrap { max-width: 1180px; padding: 0 48px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+      gap: 72px;
+      align-items: center;
+      padding-block: 72px 104px;
+    }
+    .thread { order: 0; margin: 0; }
+    h1 { font-size: 58px; }
+    .lead { font-size: 20px; }
+    .duo { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 96px; align-items: start; }
+    .duo-chat { padding-top: 8px; }
+    .interest { grid-template-columns: 200px 1fr; }
+    .signup-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 96px; align-items: start; }
+    .signup-intro h2 { font-size: 40px; }
+    .signup-intro p { margin: 0; font-size: 18px; max-width: 22em; }
   }
 </style>
 </head>
@@ -222,46 +247,51 @@
   </a>
 </header>
   <div class="wrap hero">
+    <div class="hero-text">
+      <h1>Компания в София за бизнес, гейминг, коли и наргиле</h1>
+      <p class="lead">Записваш се, избираш какво те вълнува, от трейдинг и маркетинг до PS5 турнири, и ти пишем, когато има сбирка наблизо.</p>
+      <a class="btn" href="#zapis">Запиши се</a>
+    </div>
     <div class="thread" aria-hidden="true">
       <div class="bubble in">Идваш ли довечера на наргиле?</div>
       <div class="meta in">Сбирка в Студентски град, 20:00</div>
       <div class="bubble out">Идвам!</div>
       <div class="meta out">Ти</div>
     </div>
-    <h1>Компания в София за бизнес, гейминг, коли и наргиле</h1>
-    <p class="lead">Записваш се, избираш какво те вълнува, от трейдинг и маркетинг до PS5 турнири, и ти пишем, когато има сбирка наблизо.</p>
-    <a class="btn" href="#zapis">Запиши се</a>
   </div>
 </div>
 <main>
 
-  <section aria-labelledby="kak">
-    <div class="wrap">
-      <h2 id="kak" class="visually-hidden">Как става</h2>
-      <div class="chat">
-        <p class="msg out">Как става?</p>
-        <p class="msg in">Записваш се тук и избираш какво те вълнува. Отнема минута.</p>
-        <p class="msg in">Когато има сбирка по твоя интерес наблизо, ти пишем кога и къде.</p>
-        <p class="msg in">Казваш „Идвам“ и идваш сам или с приятел. Сбирките са на публични места и са за хора над 18 години.</p>
-      </div>
-    </div>
-  </section>
-
   <section aria-labelledby="interesi">
-    <div class="wrap">
-      <h2 id="interesi">С какво започваме</h2>
-      <div class="interests">
-        <div class="interest"><h3>Бизнес и пари</h3><p>За студенти, които искат да изкарват пари: трейдинг, маркетинг, онлайн бизнес, първи клиенти. Срещаш хора, които вече го правят.</p></div>
-        <div class="interest"><h3>Наргиле и чил</h3><p>Спокойни вечери в наргиле барове, без да се чудиш с кого да излезеш.</p></div>
-        <div class="interest"><h3>Коли</h3><p>Срещи с хора, които живеят с колите си. Разговори, проекти, кафе след това.</p></div>
-        <div class="interest"><h3>Гейминг</h3><p>Вечери в гейминг клубове с хора, които играят същото като теб.</p></div>
+    <div class="wrap duo">
+      <div class="duo-chat">
+        <h2 id="kak" class="visually-hidden">Как става</h2>
+        <div class="chat">
+          <p class="msg out">Как става?</p>
+          <p class="msg in">Записваш се тук и избираш какво те вълнува. Отнема минута.</p>
+          <p class="msg in">Когато има сбирка по твоя интерес наблизо, ти пишем кога и къде.</p>
+          <p class="msg in">Казваш „Идвам“ и идваш сам или с приятел. Сбирките са на публични места и са за хора над 18 години.</p>
+        </div>
+      </div>
+      <div class="duo-list">
+        <h2 id="interesi">С какво започваме</h2>
+        <div class="interests">
+          <div class="interest"><h3>Бизнес и пари</h3><p>За студенти, които искат да изкарват пари: трейдинг, маркетинг, онлайн бизнес, първи клиенти. Срещаш хора, които вече го правят.</p></div>
+          <div class="interest"><h3>Наргиле и чил</h3><p>Спокойни вечери в наргиле барове, без да се чудиш с кого да излезеш.</p></div>
+          <div class="interest"><h3>Коли</h3><p>Срещи с хора, които живеят с колите си. Разговори, проекти, кафе след това.</p></div>
+          <div class="interest"><h3>Гейминг</h3><p>Вечери в гейминг клубове с хора, които играят същото като теб.</p></div>
+        </div>
       </div>
     </div>
   </section>
 
   <section aria-labelledby="zapis-title" id="zapis">
-    <div class="wrap">
-      <h2 id="zapis-title">Запиши се за първите сбирки</h2>
+    <div class="wrap signup-grid">
+      <div class="signup-intro">
+        <h2 id="zapis-title">Запиши се за първите сбирки</h2>
+        <p>Отнема минута. Пишем ти само когато има сбирка по твоя интерес.</p>
+      </div>
+      <div class="signup-body">
 
       <form name="signup" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" id="signup" novalidate>
         <input type="hidden" name="form-name" value="signup">
@@ -348,6 +378,7 @@
       <div class="done hidden" id="done" role="status" tabindex="-1">
         <h3>Записан си</h3>
         <p>Ще ти пишем, когато има сбирка по твоя интерес. Последвай ни в Instagram, <a href="https://www.instagram.com/idvashli.sofia/" target="_blank" rel="noopener">@idvashli.sofia</a>, за да видиш първите сбирки.</p>
+      </div>
       </div>
     </div>
   </section>
