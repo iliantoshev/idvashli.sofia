@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Идваш ли? – компания за наргиле, коли и гейминг в София</title>
-<meta name="description" content="Запиши се и ще ти пишем, когато има сбирка по твоя интерес близо до теб в София. Наргиле, коли, гейминг.">
+<title>Идваш ли? – компания за бизнес, гейминг, коли и наргиле в София</title>
+<meta name="description" content="Запиши се и ще ти пишем, когато има сбирка по твоя интерес близо до теб в София. Бизнес и пари, гейминг, коли, наргиле.">
 <meta name="theme-color" content="#121826">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 260'%3E%3Cpath d='M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z' fill='%23FFB547'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -219,8 +219,8 @@
       <div class="bubble out">Идвам!</div>
       <div class="meta out">Ти</div>
     </div>
-    <h1>Компания за наргиле, коли и гейминг в София</h1>
-    <p class="lead">Записваш се, избираш какво те вълнува и ти пишем, когато има сбирка близо до теб. Без запознанства, само хора със същия интерес.</p>
+    <h1>Компания в София за бизнес, гейминг, коли и наргиле</h1>
+    <p class="lead">Записваш се, избираш какво те вълнува, от трейдинг и маркетинг до PS5 турнири, и ти пишем, когато има сбирка близо до теб. Без запознанства, само хора със същия интерес.</p>
     <a class="btn" href="#zapis">Запиши се</a>
   </div>
 
@@ -239,6 +239,7 @@
     <div class="wrap">
       <h2 id="interesi">С какво започваме</h2>
       <div class="interests">
+        <div class="interest"><h3>Бизнес и пари</h3><p>За студенти, които искат да изкарват пари: трейдинг, маркетинг, онлайн бизнес, първи клиенти. Срещаш хора, които вече го правят.</p></div>
         <div class="interest"><h3>Наргиле и чил</h3><p>Спокойни вечери в наргиле барове, без да се чудиш с кого да излезеш.</p></div>
         <div class="interest"><h3>Коли</h3><p>Срещи с хора, които живеят с колите си. Разговори, проекти, кафе след това.</p></div>
         <div class="interest"><h3>Гейминг</h3><p>Вечери в гейминг клубове с хора, които играят същото като теб.</p></div>
@@ -268,10 +269,25 @@
         <fieldset>
           <legend>Какво те интересува? <span class="hint">– избери едно или повече</span></legend>
           <div class="choices">
+            <label class="choice"><input type="checkbox" name="interes_biznes" value="да" id="business"><span>Бизнес и пари</span></label>
             <label class="choice"><input type="checkbox" name="interes_nargile" value="да"><span>Наргиле и чил</span></label>
             <label class="choice"><input type="checkbox" name="interes_koli" value="да"><span>Коли</span></label>
             <label class="choice"><input type="checkbox" name="interes_geiming" value="да" id="gaming"><span>Гейминг</span></label>
           </div>
+          <div class="games" id="biz" hidden><fieldset>
+            <legend>Кое те вълнува? <span class="hint">– маркирай всички</span></legend>
+            <div class="choices">
+              <label class="choice"><input type="checkbox" name="biznes_treiding" value="да"><span>Трейдинг</span></label>
+              <label class="choice"><input type="checkbox" name="biznes_startap" value="да"><span>Бизнес и стартъпи</span></label>
+              <label class="choice"><input type="checkbox" name="biznes_marketing" value="да"><span>Маркетинг и соцмрежи</span></label>
+              <label class="choice"><input type="checkbox" name="biznes_investicii" value="да"><span>Инвестиции</span></label>
+              <label class="choice"><input type="checkbox" name="biznes_friilans" value="да"><span>Фрийланс и странични доходи</span></label>
+            </div>
+            <div class="field">
+              <label for="biznes-drugo">Друго</label>
+              <input type="text" id="biznes-drugo" name="biznes_drugo" placeholder="напр. крипто, недвижими имоти">
+            </div>
+          </fieldset></div>
           <div class="games" id="games" hidden><fieldset>
             <legend>Какво играеш на PS5? <span class="hint">– маркирай всички</span></legend>
             <div class="choices">
@@ -328,7 +344,7 @@
 
 <footer>
   <div class="wrap">
-    <p>Идваш ли? – сбирки по интереси в София</p>
+    <p>Идваш ли? – сбирки по интереси в София: бизнес, гейминг, коли, наргиле</p>
     <p>Въпроси: пиши ни в Instagram, <a href="https://www.instagram.com/idvashli.sofia/" target="_blank" rel="noopener">@idvashli.sofia</a></p>
   </div>
 </footer>
@@ -340,16 +356,20 @@
   var done = document.getElementById('done');
   var btn = document.getElementById('submit-btn');
 
-  var gaming = document.getElementById('gaming');
-  var games = document.getElementById('games');
-  gaming.addEventListener('change', function () {
-    games.hidden = !gaming.checked;
-    if (!gaming.checked) {
-      games.querySelectorAll('input').forEach(function (i) {
-        if (i.type === 'checkbox') i.checked = false; else i.value = '';
-      });
-    }
-  });
+  function reveal(toggleId, boxId) {
+    var toggle = document.getElementById(toggleId);
+    var box = document.getElementById(boxId);
+    toggle.addEventListener('change', function () {
+      box.hidden = !toggle.checked;
+      if (!toggle.checked) {
+        box.querySelectorAll('input').forEach(function (i) {
+          if (i.type === 'checkbox') i.checked = false; else i.value = '';
+        });
+      }
+    });
+  }
+  reveal('gaming', 'games');
+  reveal('business', 'biz');
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -358,7 +378,7 @@
     var el = function (n) { return form.elements.namedItem(n); };
     var name = el('name').value.trim();
     var contact = el('contact').value.trim();
-    var anyInterest = ['interes_nargile', 'interes_koli', 'interes_geiming'].some(function (n) { return el(n).checked; });
+    var anyInterest = ['interes_biznes', 'interes_nargile', 'interes_koli', 'interes_geiming'].some(function (n) { return el(n).checked; });
 
     if (!name) { err.textContent = 'Напиши името си.'; el('name').focus(); return; }
     if (!contact) { err.textContent = 'Напиши Instagram или телефон, за да ти пратим покана.'; el('contact').focus(); return; }
