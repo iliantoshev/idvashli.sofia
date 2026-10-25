@@ -155,6 +155,22 @@
   .check input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--amber); }
   .error { color: var(--error); font-size: 15px; font-weight: 600; min-height: 0; }
   .hidden { display: none; }
+  .games {
+    margin-top: 6px;
+    padding: 18px;
+    border: 1.5px solid var(--line);
+    border-radius: 18px;
+    background: var(--night-2);
+    display: grid;
+    gap: 14px;
+  }
+  .games[hidden] { display: none; }
+  .games fieldset { gap: 14px; }
+  .games .choice span { background: var(--night); }
+  .games .choice input:checked + span { background: var(--amber); }
+  @media (prefers-reduced-motion: no-preference) {
+    .games:not([hidden]) { animation: pop .3s ease-out both; }
+  }
 
   .done {
     background: var(--night-2); border: 1.5px solid var(--amber); border-radius: 22px;
@@ -254,8 +270,22 @@
           <div class="choices">
             <label class="choice"><input type="checkbox" name="interes_nargile" value="да"><span>Наргиле и чил</span></label>
             <label class="choice"><input type="checkbox" name="interes_koli" value="да"><span>Коли</span></label>
-            <label class="choice"><input type="checkbox" name="interes_geiming" value="да"><span>Гейминг</span></label>
+            <label class="choice"><input type="checkbox" name="interes_geiming" value="да" id="gaming"><span>Гейминг</span></label>
           </div>
+          <div class="games" id="games" hidden><fieldset>
+            <legend>Какво играеш? <span class="hint">– маркирай всички</span></legend>
+            <div class="choices">
+              <label class="choice"><input type="checkbox" name="igra_cs2" value="да"><span>Counter-Strike 2</span></label>
+              <label class="choice"><input type="checkbox" name="igra_lol" value="да"><span>League of Legends</span></label>
+              <label class="choice"><input type="checkbox" name="igra_valorant" value="да"><span>Valorant</span></label>
+              <label class="choice"><input type="checkbox" name="igra_fc" value="да"><span>EA Sports FC</span></label>
+              <label class="choice"><input type="checkbox" name="igra_fortnite" value="да"><span>Fortnite</span></label>
+            </div>
+            <div class="field">
+              <label for="igra-drugi">Друга игра</label>
+              <input type="text" id="igra-drugi" name="igra_drugi" placeholder="напр. Minecraft">
+            </div>
+          </fieldset></div>
         </fieldset>
 
         <div class="field">
@@ -309,6 +339,17 @@
   var err = document.getElementById('form-error');
   var done = document.getElementById('done');
   var btn = document.getElementById('submit-btn');
+
+  var gaming = document.getElementById('gaming');
+  var games = document.getElementById('games');
+  gaming.addEventListener('change', function () {
+    games.hidden = !gaming.checked;
+    if (!gaming.checked) {
+      games.querySelectorAll('input').forEach(function (i) {
+        if (i.type === 'checkbox') i.checked = false; else i.value = '';
+      });
+    }
+  });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
