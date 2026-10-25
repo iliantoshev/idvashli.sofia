@@ -3,10 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Идваш ли? – компания за бизнес, гейминг, коли и наргиле в София</title>
+<title>Идваш ли? | Сбирки по интереси в София</title>
 <meta name="description" content="Запиши се и ще ти пишем, когато има сбирка по твоя интерес близо до теб в София. Бизнес и пари, гейминг, коли, наргиле.">
-<meta name="theme-color" content="#121826">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 260'%3E%3Cpath d='M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z' fill='%23FFB547'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#FFB547">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Идваш ли? | Сбирки по интереси в София">
+<meta property="og:description" content="Бизнес и пари, гейминг, коли, наргиле. Запиши се и ще ти пишем, когато има сбирка наблизо.">
+<meta property="og:image" content="https://idvashli.netlify.app/og-image.png">
+<meta property="og:locale" content="bg_BG">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
@@ -39,9 +46,14 @@
 
   .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px; }
 
+  /* Amber block: header + hero */
+  .sun { background: var(--amber); color: var(--night); }
+  .sun a { color: var(--night); }
+  .sun :focus-visible { outline-color: var(--night); }
+
   /* Header */
   .top { padding-block: 20px; }
-  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--cream); }
+  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--night); }
   .brand svg { width: 34px; height: 30px; }
   .brand span { font-family: var(--display); font-weight: 800; font-size: 17px; letter-spacing: -0.2px; }
 
@@ -57,8 +69,8 @@
   }
   .bubble.in {
     align-self: flex-start;
-    background: var(--amber);
-    color: var(--night);
+    background: var(--night);
+    color: var(--cream);
     border-radius: 28px 28px 28px 6px;
     font-size: clamp(26px, 7vw, 40px);
   }
@@ -69,7 +81,7 @@
     border-radius: 28px 28px 6px 28px;
     font-size: clamp(22px, 5.5vw, 30px);
   }
-  .meta { font-family: var(--body); font-weight: 600; font-size: 13px; color: var(--mist); }
+  .meta { font-family: var(--body); font-weight: 600; font-size: 13px; color: #4A3A1E; }
   .meta.in { align-self: flex-start; margin: -6px 0 0 8px; }
   .meta.out { align-self: flex-end; margin: -6px 8px 0 0; }
 
@@ -81,7 +93,7 @@
     letter-spacing: -0.5px;
     margin: 0 0 18px;
   }
-  .lead { color: var(--mist); font-size: 18px; margin: 0 0 28px; max-width: 34em; }
+  .lead { color: #2A2620; font-size: 18px; margin: 0 0 28px; max-width: 34em; }
 
   .btn {
     display: inline-flex; align-items: center; justify-content: center;
@@ -92,9 +104,12 @@
     text-decoration: none; cursor: pointer;
   }
   .btn:hover { background: var(--cream); color: var(--night); }
+  .sun .btn { background: var(--night); color: var(--cream); }
+  .sun .btn:hover { background: var(--cream); color: var(--night); }
 
   /* Sections */
-  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  section { padding: 56px 0; }
+  section + section { border-top: 1px solid var(--line); }
   h2 {
     font-family: var(--display);
     font-weight: 800;
@@ -103,24 +118,19 @@
     margin: 0 0 28px;
   }
 
-  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 24px; counter-reset: s; }
-  .steps li { display: grid; grid-template-columns: 48px 1fr; gap: 16px; align-items: start; counter-increment: s; }
-  .steps li::before {
-    content: counter(s);
-    width: 48px; height: 48px; border-radius: 50%;
-    border: 2px solid var(--amber); color: var(--amber);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--display); font-weight: 800; font-size: 18px;
-  }
-  .steps h3, .interests h3 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
-  .steps p, .interests p { margin: 0; color: var(--mist); }
+  .chat { display: flex; flex-direction: column; gap: 12px; }
+  .msg { max-width: 86%; padding: 14px 18px; font-size: 17px; line-height: 1.4; }
+  .msg.out { align-self: flex-end; background: var(--cream); color: var(--night); border-radius: 22px 22px 6px 22px; font-family: var(--display); font-weight: 700; }
+  .msg.in { align-self: flex-start; background: var(--night-2); color: var(--cream); border: 1.5px solid var(--line); border-radius: 22px 22px 22px 6px; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .interests h3 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
+  .interests p { margin: 0; color: var(--mist); }
 
   .interests { display: grid; gap: 0; }
   .interest { padding: 22px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr; gap: 4px; }
   .interest:first-child { padding-top: 0; }
   .interest h3 { font-family: var(--display); font-weight: 700; font-size: 22px; color: var(--amber); }
 
-  .safety { margin-top: 28px; color: var(--mist); font-size: 15px; }
 
   /* Form */
   form { display: grid; gap: 22px; }
@@ -204,14 +214,13 @@
 </head>
 <body>
 
+<div class="sun">
 <header class="wrap top">
-  <a class="brand" href="/" aria-label="Идваш ли? – начало">
-    <svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#FFB547"/><text x="150" y="160" text-anchor="middle" font-family="Unbounded, sans-serif" font-weight="800" font-size="150" fill="#121826">?</text></svg>
+  <a class="brand" href="/" aria-label="Идваш ли? Начало">
+    <svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#121826"/><text x="150" y="160" text-anchor="middle" font-family="Unbounded, sans-serif" font-weight="800" font-size="150" fill="#FFB547">?</text></svg>
     <span>Идваш ли?</span>
   </a>
 </header>
-
-<main>
   <div class="wrap hero">
     <div class="thread" aria-hidden="true">
       <div class="bubble in">Идваш ли довечера на наргиле?</div>
@@ -220,18 +229,21 @@
       <div class="meta out">Ти</div>
     </div>
     <h1>Компания в София за бизнес, гейминг, коли и наргиле</h1>
-    <p class="lead">Записваш се, избираш какво те вълнува, от трейдинг и маркетинг до PS5 турнири, и ти пишем, когато има сбирка близо до теб. Без запознанства, само хора със същия интерес.</p>
+    <p class="lead">Записваш се, избираш какво те вълнува, от трейдинг и маркетинг до PS5 турнири, и ти пишем, когато има сбирка наблизо.</p>
     <a class="btn" href="#zapis">Запиши се</a>
   </div>
+</div>
+<main>
 
   <section aria-labelledby="kak">
     <div class="wrap">
-      <h2 id="kak">Как става</h2>
-      <ol class="steps">
-        <li><div><h3>Записваш се</h3><p>Отнема минута. Казваш какво те интересува и в кой квартал си.</p></div></li>
-        <li><div><h3>Получаваш покана</h3><p>Когато има сбирка по твоя интерес, ти пишем кога и къде.</p></div></li>
-        <li><div><h3>Казваш „Идвам“</h3><p>Идваш сам или с приятел и се запознаваш с хора, които харесват същото.</p></div></li>
-      </ol>
+      <h2 id="kak" class="visually-hidden">Как става</h2>
+      <div class="chat">
+        <p class="msg out">Как става?</p>
+        <p class="msg in">Записваш се тук и избираш какво те вълнува. Отнема минута.</p>
+        <p class="msg in">Когато има сбирка по твоя интерес наблизо, ти пишем кога и къде.</p>
+        <p class="msg in">Казваш „Идвам“ и идваш сам или с приятел. Сбирките са на публични места и са за хора над 18 години.</p>
+      </div>
     </div>
   </section>
 
@@ -244,7 +256,6 @@
         <div class="interest"><h3>Коли</h3><p>Срещи с хора, които живеят с колите си. Разговори, проекти, кафе след това.</p></div>
         <div class="interest"><h3>Гейминг</h3><p>Вечери в гейминг клубове с хора, които играят същото като теб.</p></div>
       </div>
-      <p class="safety">Сбирките са само на публични места и само за хора над 18 години.</p>
     </div>
   </section>
 
@@ -262,12 +273,12 @@
         </div>
 
         <div class="field">
-          <label for="contact">Instagram или телефон <span class="hint">– за да ти пратим поканата</span></label>
+          <label for="contact">Instagram или телефон <span class="hint">(за да ти пратим поканата)</span></label>
           <input type="text" id="contact" name="contact" autocomplete="tel" required>
         </div>
 
         <fieldset>
-          <legend>Какво те интересува? <span class="hint">– избери едно или повече</span></legend>
+          <legend>Какво те интересува? <span class="hint">(избери едно или повече)</span></legend>
           <div class="choices">
             <label class="choice"><input type="checkbox" name="interes_biznes" value="да" id="business"><span>Бизнес и пари</span></label>
             <label class="choice"><input type="checkbox" name="interes_nargile" value="да"><span>Наргиле и чил</span></label>
@@ -275,7 +286,7 @@
             <label class="choice"><input type="checkbox" name="interes_geiming" value="да" id="gaming"><span>Гейминг</span></label>
           </div>
           <div class="games" id="biz" hidden><fieldset>
-            <legend>Кое те вълнува? <span class="hint">– маркирай всички</span></legend>
+            <legend>Кое те вълнува? <span class="hint">(маркирай всички)</span></legend>
             <div class="choices">
               <label class="choice"><input type="checkbox" name="biznes_treiding" value="да"><span>Трейдинг</span></label>
               <label class="choice"><input type="checkbox" name="biznes_startap" value="да"><span>Бизнес и стартъпи</span></label>
@@ -289,7 +300,7 @@
             </div>
           </fieldset></div>
           <div class="games" id="games" hidden><fieldset>
-            <legend>Какво играеш на PS5? <span class="hint">– маркирай всички</span></legend>
+            <legend>Какво играеш на PS5? <span class="hint">(маркирай всички)</span></legend>
             <div class="choices">
               <label class="choice"><input type="checkbox" name="igra_fc" value="да"><span>EA Sports FC</span></label>
               <label class="choice"><input type="checkbox" name="igra_mk" value="да"><span>Mortal Kombat</span></label>
@@ -344,8 +355,9 @@
 
 <footer>
   <div class="wrap">
-    <p>Идваш ли? – сбирки по интереси в София: бизнес, гейминг, коли, наргиле</p>
-    <p>Въпроси: пиши ни в Instagram, <a href="https://www.instagram.com/idvashli.sofia/" target="_blank" rel="noopener">@idvashli.sofia</a></p>
+    <p>Идваш ли? Сбирки по интереси в София.</p>
+    <p>Пиши ни в Instagram: <a href="https://www.instagram.com/idvashli.sofia/" target="_blank" rel="noopener">@idvashli.sofia</a></p>
+    <p>© 2026 Идваш ли?</p>
   </div>
 </footer>
 
