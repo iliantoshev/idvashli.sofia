@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Идваш ли? – компания за наргиле, коли и гейминг в София</title>
+<meta name="description" content="Запиши се и ще ти пишем, когато има сбирка по твоя интерес близо до теб в София. Наргиле, коли, гейминг.">
+<meta name="theme-color" content="#121826">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 260'%3E%3Cpath d='M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z' fill='%23FFB547'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #121826;
+    --night-2: #1B2335;
+    --line: #2C3650;
+    --amber: #FFB547;
+    --amber-deep: #E89A24;
+    --cream: #F3EDE2;
+    --mist: #A7B0C2;
+    --error: #FF8A7A;
+    --display: 'Unbounded', system-ui, sans-serif;
+    --body: 'Manrope', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--night);
+    color: var(--cream);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  a { color: var(--amber); }
+  a:hover { color: var(--cream); }
+  :focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; border-radius: 6px; }
+
+  .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+  /* Header */
+  .top { padding-block: 20px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--cream); }
+  .brand svg { width: 34px; height: 30px; }
+  .brand span { font-family: var(--display); font-weight: 800; font-size: 17px; letter-spacing: -0.2px; }
+
+  /* Hero: a chat thread is the signature moment */
+  .hero { padding-block: 36px 56px; }
+  .thread { display: flex; flex-direction: column; gap: 14px; margin-bottom: 44px; }
+  .bubble {
+    max-width: 88%;
+    padding: 18px 22px;
+    font-family: var(--display);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .bubble.in {
+    align-self: flex-start;
+    background: var(--amber);
+    color: var(--night);
+    border-radius: 28px 28px 28px 6px;
+    font-size: clamp(26px, 7vw, 40px);
+  }
+  .bubble.out {
+    align-self: flex-end;
+    background: var(--cream);
+    color: var(--night);
+    border-radius: 28px 28px 6px 28px;
+    font-size: clamp(22px, 5.5vw, 30px);
+  }
+  .meta { font-family: var(--body); font-weight: 600; font-size: 13px; color: var(--mist); }
+  .meta.in { align-self: flex-start; margin: -6px 0 0 8px; }
+  .meta.out { align-self: flex-end; margin: -6px 8px 0 0; }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(30px, 7.4vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    margin: 0 0 18px;
+  }
+  .lead { color: var(--mist); font-size: 18px; margin: 0 0 28px; max-width: 34em; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 54px; padding: 0 28px;
+    background: var(--amber); color: var(--night);
+    border: 0; border-radius: 999px;
+    font-family: var(--display); font-weight: 700; font-size: 17px;
+    text-decoration: none; cursor: pointer;
+  }
+  .btn:hover { background: var(--cream); color: var(--night); }
+
+  /* Sections */
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  h2 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(24px, 5.6vw, 32px);
+    line-height: 1.15;
+    margin: 0 0 28px;
+  }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 24px; counter-reset: s; }
+  .steps li { display: grid; grid-template-columns: 48px 1fr; gap: 16px; align-items: start; counter-increment: s; }
+  .steps li::before {
+    content: counter(s);
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 2px solid var(--amber); color: var(--amber);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-weight: 800; font-size: 18px;
+  }
+  .steps h3, .interests h3 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
+  .steps p, .interests p { margin: 0; color: var(--mist); }
+
+  .interests { display: grid; gap: 0; }
+  .interest { padding: 22px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr; gap: 4px; }
+  .interest:first-child { padding-top: 0; }
+  .interest h3 { font-family: var(--display); font-weight: 700; font-size: 22px; color: var(--amber); }
+
+  .safety { margin-top: 28px; color: var(--mist); font-size: 15px; }
+
+  /* Form */
+  form { display: grid; gap: 22px; }
+  .field { display: grid; gap: 8px; }
+  label, legend { font-weight: 700; font-size: 16px; }
+  .hint { font-weight: 400; color: var(--mist); font-size: 14px; }
+  input[type="text"], input[type="tel"] {
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 16px;
+    background: var(--night-2);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    color: var(--cream);
+    font: inherit;
+  }
+  input[type="text"]:focus, input[type="tel"]:focus { border-color: var(--amber); outline: none; }
+  fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; }
+  legend { padding: 0; margin-bottom: 4px; }
+  .choices { display: flex; flex-wrap: wrap; gap: 10px; }
+  .choice { position: relative; }
+  .choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .choice span {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
+    border: 1.5px solid var(--line); border-radius: 999px;
+    background: var(--night-2); color: var(--cream);
+    font-weight: 600; cursor: pointer; user-select: none;
+  }
+  .choice input:checked + span { background: var(--amber); border-color: var(--amber); color: var(--night); }
+  .choice input:focus-visible + span { outline: 3px solid var(--amber); outline-offset: 3px; }
+  .check { display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; font-weight: 400; font-size: 15px; color: var(--mist); }
+  .check input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--amber); }
+  .error { color: var(--error); font-size: 15px; font-weight: 600; min-height: 0; }
+  .hidden { display: none; }
+
+  .done {
+    background: var(--night-2); border: 1.5px solid var(--amber); border-radius: 22px;
+    padding: 28px;
+  }
+  .done h3 { font-family: var(--display); font-weight: 800; font-size: 24px; margin: 0 0 8px; color: var(--amber); }
+  .done p { margin: 0; color: var(--cream); }
+
+  footer { padding: 36px 0 48px; border-top: 1px solid var(--line); color: var(--mist); font-size: 14px; }
+  footer p { margin: 0 0 6px; }
+
+  /* The one orchestrated moment: the chat plays out on load */
+  @media (prefers-reduced-motion: no-preference) {
+    .bubble, .meta { animation: pop .45s cubic-bezier(.2,.9,.3,1.2) both; }
+    .bubble.in { animation-delay: .15s; }
+    .meta.in { animation-delay: .35s; }
+    .bubble.out { animation-delay: 1.1s; }
+    .meta.out { animation-delay: 1.3s; }
+    @keyframes pop {
+      from { opacity: 0; transform: translateY(10px) scale(.96); }
+      to { opacity: 1; transform: none; }
+    }
+  }
+
+  @media (min-width: 720px) {
+    .hero { padding-block: 64px 80px; }
+    section { padding: 72px 0; }
+    .interest { grid-template-columns: 220px 1fr; gap: 24px; align-items: baseline; }
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap top">
+  <a class="brand" href="/" aria-label="Идваш ли? – начало">
+    <svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#FFB547"/><text x="150" y="160" text-anchor="middle" font-family="Unbounded, sans-serif" font-weight="800" font-size="150" fill="#121826">?</text></svg>
+    <span>Идваш ли?</span>
+  </a>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div class="thread" aria-hidden="true">
+      <div class="bubble in">Идваш ли довечера на наргиле?</div>
+      <div class="meta in">Сбирка в Студентски град, 20:00</div>
+      <div class="bubble out">Идвам!</div>
+      <div class="meta out">Ти</div>
+    </div>
+    <h1>Компания за наргиле, коли и гейминг в София</h1>
+    <p class="lead">Записваш се, избираш какво те вълнува и ти пишем, когато има сбирка близо до теб. Без запознанства, само хора със същия интерес.</p>
+    <a class="btn" href="#zapis">Запиши се</a>
+  </div>
+
+  <section aria-labelledby="kak">
+    <div class="wrap">
+      <h2 id="kak">Как става</h2>
+      <ol class="steps">
+        <li><div><h3>Записваш се</h3><p>Отнема минута. Казваш какво те интересува и в кой квартал си.</p></div></li>
+        <li><div><h3>Получаваш покана</h3><p>Когато има сбирка по твоя интерес, ти пишем кога и къде.</p></div></li>
+        <li><div><h3>Казваш „Идвам“</h3><p>Идваш сам или с приятел и се запознаваш с хора, които харесват същото.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section aria-labelledby="interesi">
+    <div class="wrap">
+      <h2 id="interesi">С какво започваме</h2>
+      <div class="interests">
+        <div class="interest"><h3>Наргиле и чил</h3><p>Спокойни вечери в наргиле барове, без да се чудиш с кого да излезеш.</p></div>
+        <div class="interest"><h3>Коли</h3><p>Срещи с хора, които живеят с колите си. Разговори, проекти, кафе след това.</p></div>
+        <div class="interest"><h3>Гейминг</h3><p>Вечери в гейминг клубове с хора, които играят същото като теб.</p></div>
+      </div>
+      <p class="safety">Сбирките са само на публични места и само за хора над 18 години.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="zapis-title" id="zapis">
+    <div class="wrap">
+      <h2 id="zapis-title">Запиши се за първите сбирки</h2>
+
+      <form name="signup" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" id="signup" novalidate>
+        <input type="hidden" name="form-name" value="signup">
+        <p class="hidden"><label>Не попълвай това поле <input name="bot-field"></label></p>
+
+        <div class="field">
+          <label for="name">Име</label>
+          <input type="text" id="name" name="name" autocomplete="given-name" required>
+        </div>
+
+        <div class="field">
+          <label for="contact">Instagram или телефон <span class="hint">– за да ти пратим поканата</span></label>
+          <input type="text" id="contact" name="contact" autocomplete="tel" required>
+        </div>
+
+        <fieldset>
+          <legend>Какво те интересува? <span class="hint">– избери едно или повече</span></legend>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="interes_nargile" value="да"><span>Наргиле и чил</span></label>
+            <label class="choice"><input type="checkbox" name="interes_koli" value="да"><span>Коли</span></label>
+            <label class="choice"><input type="checkbox" name="interes_geiming" value="да"><span>Гейминг</span></label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="area">Квартал или общежитие</label>
+          <input type="text" id="area" name="area" placeholder="напр. Студентски град">
+        </div>
+
+        <fieldset>
+          <legend>Кои дни ти е удобно?</legend>
+          <div class="choices">
+            <label class="choice"><input type="checkbox" name="den_chetvartak" value="да"><span>Четвъртък</span></label>
+            <label class="choice"><input type="checkbox" name="den_petak" value="да"><span>Петък</span></label>
+            <label class="choice"><input type="checkbox" name="den_sabota" value="да"><span>Събота</span></label>
+            <label class="choice"><input type="checkbox" name="den_nedelya" value="да"><span>Неделя</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Ще дойдеш сам или с приятел?</legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="s_kogo" value="сам"><span>Сам</span></label>
+            <label class="choice"><input type="radio" name="s_kogo" value="с приятел"><span>С приятел</span></label>
+          </div>
+        </fieldset>
+
+        <label class="check"><input type="checkbox" name="pulnoleten" value="да" id="age" required><span>Навършил съм 18 години.</span></label>
+        <label class="check"><input type="checkbox" name="saglasie" value="да" id="consent" required><span>Съгласен съм да ми пишете за сбирки. Използваме данните ти само за това и ги изтриваме, когато поискаш.</span></label>
+
+        <p class="error" id="form-error" role="alert"></p>
+        <div><button class="btn" type="submit" id="submit-btn">Запиши ме</button></div>
+      </form>
+
+      <div class="done hidden" id="done" role="status" tabindex="-1">
+        <h3>Записан си</h3>
+        <p>Ще ти пишем, когато има сбирка по твоя интерес. Последвай ни в Instagram, за да видиш първите сбирки.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Идваш ли? – сбирки по интереси в София</p>
+    <p>Въпроси: пиши ни в Instagram</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var form = document.getElementById('signup');
+  var err = document.getElementById('form-error');
+  var done = document.getElementById('done');
+  var btn = document.getElementById('submit-btn');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    err.textContent = '';
+
+    var el = function (n) { return form.elements.namedItem(n); };
+    var name = el('name').value.trim();
+    var contact = el('contact').value.trim();
+    var anyInterest = ['interes_nargile', 'interes_koli', 'interes_geiming'].some(function (n) { return el(n).checked; });
+
+    if (!name) { err.textContent = 'Напиши името си.'; el('name').focus(); return; }
+    if (!contact) { err.textContent = 'Напиши Instagram или телефон, за да ти пратим покана.'; el('contact').focus(); return; }
+    if (!anyInterest) { err.textContent = 'Избери поне един интерес.'; return; }
+    if (!el('pulnoleten').checked) { err.textContent = 'Сбирките са само за хора над 18 години.'; return; }
+    if (!el('saglasie').checked) { err.textContent = 'Потвърди, че можем да ти пишем за сбирки.'; return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Записваме…';
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    }).then(function (res) {
+      if (!res.ok) throw new Error('bad status');
+      form.classList.add('hidden');
+      done.classList.remove('hidden');
+      done.focus();
+    }).catch(function () {
+      err.textContent = 'Не успяхме да те запишем. Провери връзката и опитай пак.';
+      btn.disabled = false;
+      btn.textContent = 'Запиши ме';
+    });
+  });
+})();
+</script>
+</body>
+</html>
