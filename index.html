@@ -289,7 +289,7 @@
     <div class="wrap signup-grid">
       <div class="signup-intro">
         <h2 id="zapis-title">Запиши се за първите сбирки</h2>
-        <p>Отнема минута. Пишем ти само когато има сбирка по твоя интерес.</p>
+        <p>Отнема минута. Свързваме се с теб само когато има сбирка по твоя интерес.</p>
       </div>
       <div class="signup-body">
 
@@ -298,13 +298,18 @@
         <p class="hidden"><label>Не попълвай това поле <input name="bot-field"></label></p>
 
         <div class="field">
-          <label for="name">Име</label>
-          <input type="text" id="name" name="name" autocomplete="given-name" required>
+          <label for="name">Име и фамилия</label>
+          <input type="text" id="name" name="name" autocomplete="name" placeholder="напр. Иван Петров" required>
         </div>
 
         <div class="field">
-          <label for="contact">Instagram или телефон <span class="hint">(за да ти пратим поканата)</span></label>
-          <input type="text" id="contact" name="contact" autocomplete="tel" required>
+          <label for="phone">Телефон <span class="hint">(за да ти се обадим за сбирката)</span></label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="напр. 0888 123 456" required>
+        </div>
+
+        <div class="field">
+          <label for="instagram">Instagram <span class="hint">(по желание)</span></label>
+          <input type="text" id="instagram" name="instagram" autocapitalize="off" placeholder="напр. ivan.petrov">
         </div>
 
         <fieldset>
@@ -369,7 +374,7 @@
         </fieldset>
 
         <label class="check"><input type="checkbox" name="pulnoleten" value="да" id="age" required><span>Навършил съм 18 години.</span></label>
-        <label class="check"><input type="checkbox" name="saglasie" value="да" id="consent" required><span>Съгласен съм да ми пишете за сбирки. Използваме данните ти само за това и ги изтриваме, когато поискаш.</span></label>
+        <label class="check"><input type="checkbox" name="saglasie" value="да" id="consent" required><span>Съгласен съм да ми пишете или звъните за сбирки. Използваме данните ти само за това и ги изтриваме, когато поискаш.</span></label>
 
         <p class="error" id="form-error" role="alert"></p>
         <div><button class="btn" type="submit" id="submit-btn">Запиши ме</button></div>
@@ -419,15 +424,15 @@
     err.textContent = '';
 
     var el = function (n) { return form.elements.namedItem(n); };
-    var name = el('name').value.trim();
-    var contact = el('contact').value.trim();
+    var name = el('name').value.trim().replace(/\s+/g, ' ');
+    var phone = el('phone').value.replace(/[\s\-().]/g, '');
     var anyInterest = ['interes_biznes', 'interes_nargile', 'interes_koli', 'interes_geiming'].some(function (n) { return el(n).checked; });
 
-    if (!name) { err.textContent = 'Напиши името си.'; el('name').focus(); return; }
-    if (!contact) { err.textContent = 'Напиши Instagram или телефон, за да ти пратим покана.'; el('contact').focus(); return; }
+    if (name.split(' ').length < 2) { err.textContent = 'Напиши име и фамилия.'; el('name').focus(); return; }
+    if (!/^(\+359|0)8[7-9]\d{7}$/.test(phone)) { err.textContent = 'Напиши телефон във формат 0888 123 456.'; el('phone').focus(); return; }
     if (!anyInterest) { err.textContent = 'Избери поне един интерес.'; return; }
     if (!el('pulnoleten').checked) { err.textContent = 'Сбирките са само за хора над 18 години.'; return; }
-    if (!el('saglasie').checked) { err.textContent = 'Потвърди, че можем да ти пишем за сбирки.'; return; }
+    if (!el('saglasie').checked) { err.textContent = 'Потвърди, че можем да се свържем с теб за сбирки.'; return; }
 
     btn.disabled = true;
     btn.textContent = 'Записваме…';
