@@ -177,6 +177,7 @@
   .games[hidden] { display: none; }
   .games fieldset { gap: 14px; }
   .games .choice span { background: var(--night); }
+  .dates .choice span { min-width: 92px; justify-content: center; font-variant-numeric: tabular-nums; }
   .games .choice input:checked + span { background: var(--amber); }
   @media (prefers-reduced-motion: no-preference) {
     .games:not([hidden]) { animation: pop .3s ease-out both; }
@@ -371,13 +372,9 @@
         </div>
 
         <fieldset>
-          <legend>Кои дни ти е удобно?</legend>
-          <div class="choices">
-            <label class="choice"><input type="checkbox" name="den_chetvartak" value="да"><span>Четвъртък</span></label>
-            <label class="choice"><input type="checkbox" name="den_petak" value="да"><span>Петък</span></label>
-            <label class="choice"><input type="checkbox" name="den_sabota" value="да"><span>Събота</span></label>
-            <label class="choice"><input type="checkbox" name="den_nedelya" value="да"><span>Неделя</span></label>
-          </div>
+          <legend>Кои дати ти е удобно? <span class="hint">(маркирай всички)</span></legend>
+          <div class="choices dates" id="dates"></div>
+          <input type="hidden" name="dati" id="dati" value="">
         </fieldset>
 
         <fieldset>
@@ -434,6 +431,33 @@
   reveal('gaming', 'games');
   reveal('business', 'biz');
   reveal('sport', 'sports');
+
+  // Dates: the next 14 days, each chip shows weekday + date
+  var DAYS = ['нд', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+  var datesBox = document.getElementById('dates');
+  var datiField = document.getElementById('dati');
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var today = new Date();
+  for (var k = 0; k < 14; k++) {
+    var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + k);
+    var short = DAYS[d.getDay()] + ' ' + pad(d.getDate()) + '.' + pad(d.getMonth() + 1);
+    var full = short + '.' + d.getFullYear();
+    var lab = document.createElement('label');
+    lab.className = 'choice';
+    var box = document.createElement('input');
+    box.type = 'checkbox';
+    box.value = full;
+    var txt = document.createElement('span');
+    txt.textContent = short;
+    lab.appendChild(box);
+    lab.appendChild(txt);
+    datesBox.appendChild(lab);
+  }
+  datesBox.addEventListener('change', function () {
+    var picked = [];
+    datesBox.querySelectorAll('input:checked').forEach(function (i) { picked.push(i.value); });
+    datiField.value = picked.join(', ');
+  });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
