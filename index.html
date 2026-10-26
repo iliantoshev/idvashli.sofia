@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Идваш ли? | Сбирки по интереси в София</title>
-<meta name="description" content="Запиши се и ще ти пишем, когато има сбирка по твоя интерес близо до теб в София. Бизнес и пари, гейминг, коли, наргиле.">
+<meta name="description" content="Запиши се и ще ти пишем, когато има сбирка по твоя интерес близо до теб в София. Бизнес и пари, спорт, гейминг, коли, наргиле.">
 <meta name="theme-color" content="#FFB547">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Идваш ли? | Сбирки по интереси в София">
-<meta property="og:description" content="Бизнес и пари, гейминг, коли, наргиле. Запиши се и ще ти пишем, когато има сбирка наблизо.">
+<meta property="og:description" content="Бизнес и пари, спорт, гейминг, коли, наргиле. Запиши се и ще ти пишем, когато има сбирка наблизо.">
 <meta property="og:image" content="https://idvashli.netlify.app/og-image.png">
 <meta property="og:locale" content="bg_BG">
 <meta name="twitter:card" content="summary_large_image">
@@ -248,7 +248,7 @@
 </header>
   <div class="wrap hero">
     <div class="hero-text">
-      <h1>Компания в София за бизнес, гейминг, коли и наргиле</h1>
+      <h1>Компания в София за бизнес, спорт, гейминг, коли и наргиле</h1>
       <p class="lead">Записваш се, избираш какво те вълнува, от трейдинг и маркетинг до PS5 турнири, и ти пишем, когато има сбирка наблизо.</p>
       <a class="btn" href="#zapis">Запиши се</a>
     </div>
@@ -277,6 +277,7 @@
         <h2 id="interesi">С какво започваме</h2>
         <div class="interests">
           <div class="interest"><h3>Бизнес и пари</h3><p>За студенти, които искат да изкарват пари: трейдинг, маркетинг, онлайн бизнес, първи клиенти. Срещаш хора, които вече го правят.</p></div>
+          <div class="interest"><h3>Спорт</h3><p>Футбол, баскетбол, волейбол или фитнес с хора, които търсят отбор или партньор за тренировка.</p></div>
           <div class="interest"><h3>Наргиле и чил</h3><p>Спокойни вечери в наргиле барове, без да се чудиш с кого да излезеш.</p></div>
           <div class="interest"><h3>Коли</h3><p>Срещи с хора, които живеят с колите си. Разговори, проекти, кафе след това.</p></div>
           <div class="interest"><h3>Гейминг</h3><p>Вечери в гейминг клубове с хора, които играят същото като теб.</p></div>
@@ -316,6 +317,7 @@
           <legend>Какво те интересува? <span class="hint">(избери едно или повече)</span></legend>
           <div class="choices">
             <label class="choice"><input type="checkbox" name="interes_biznes" value="да" id="business"><span>Бизнес и пари</span></label>
+            <label class="choice"><input type="checkbox" name="interes_sport" value="да" id="sport"><span>Спорт</span></label>
             <label class="choice"><input type="checkbox" name="interes_nargile" value="да"><span>Наргиле и чил</span></label>
             <label class="choice"><input type="checkbox" name="interes_koli" value="да"><span>Коли</span></label>
             <label class="choice"><input type="checkbox" name="interes_geiming" value="да" id="gaming"><span>Гейминг</span></label>
@@ -332,6 +334,19 @@
             <div class="field">
               <label for="biznes-drugo">Друго</label>
               <input type="text" id="biznes-drugo" name="biznes_drugo" placeholder="напр. крипто, недвижими имоти">
+            </div>
+          </fieldset></div>
+          <div class="games" id="sports" hidden><fieldset>
+            <legend>Какъв спорт? <span class="hint">(маркирай всички)</span></legend>
+            <div class="choices">
+              <label class="choice"><input type="checkbox" name="sport_futbol" value="да"><span>Футбол</span></label>
+              <label class="choice"><input type="checkbox" name="sport_basketbol" value="да"><span>Баскетбол</span></label>
+              <label class="choice"><input type="checkbox" name="sport_voleibol" value="да"><span>Волейбол</span></label>
+              <label class="choice"><input type="checkbox" name="sport_fitnes" value="да"><span>Фитнес</span></label>
+            </div>
+            <div class="field">
+              <label for="sport-drug">Друг спорт</label>
+              <input type="text" id="sport-drug" name="sport_drug" placeholder="напр. падел, бягане">
             </div>
           </fieldset></div>
           <div class="games" id="games" hidden><fieldset>
@@ -418,6 +433,7 @@
   }
   reveal('gaming', 'games');
   reveal('business', 'biz');
+  reveal('sport', 'sports');
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -426,7 +442,7 @@
     var el = function (n) { return form.elements.namedItem(n); };
     var name = el('name').value.trim().replace(/\s+/g, ' ');
     var phone = el('phone').value.replace(/[\s\-().]/g, '');
-    var anyInterest = ['interes_biznes', 'interes_nargile', 'interes_koli', 'interes_geiming'].some(function (n) { return el(n).checked; });
+    var anyInterest = ['interes_biznes', 'interes_sport', 'interes_nargile', 'interes_koli', 'interes_geiming'].some(function (n) { return el(n).checked; });
 
     if (name.split(' ').length < 2) { err.textContent = 'Напиши име и фамилия.'; el('name').focus(); return; }
     if (!/^(\+359|0)8[7-9]\d{7}$/.test(phone)) { err.textContent = 'Напиши телефон във формат 0888 123 456.'; el('phone').focus(); return; }
