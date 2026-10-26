@@ -317,54 +317,59 @@
         <fieldset>
           <legend>Какво те интересува? <span class="hint">(избери едно или повече)</span></legend>
           <div class="choices">
-            <label class="choice"><input type="checkbox" name="interes_biznes" value="да" id="business"><span>Бизнес и пари</span></label>
-            <label class="choice"><input type="checkbox" name="interes_sport" value="да" id="sport"><span>Спорт</span></label>
-            <label class="choice"><input type="checkbox" name="interes_nargile" value="да"><span>Наргиле и чил</span></label>
-            <label class="choice"><input type="checkbox" name="interes_koli" value="да"><span>Коли</span></label>
-            <label class="choice"><input type="checkbox" name="interes_geiming" value="да" id="gaming"><span>Гейминг</span></label>
+            <label class="choice"><input type="checkbox" value="Бизнес и пари" id="business" data-interest><span>Бизнес и пари</span></label>
+            <label class="choice"><input type="checkbox" value="Спорт" id="sport" data-interest><span>Спорт</span></label>
+            <label class="choice"><input type="checkbox" value="Наргиле и чил" data-interest><span>Наргиле и чил</span></label>
+            <label class="choice"><input type="checkbox" value="Коли" data-interest><span>Коли</span></label>
+            <label class="choice"><input type="checkbox" value="Гейминг" id="gaming" data-interest><span>Гейминг</span></label>
           </div>
-          <div class="games" id="biz" hidden><fieldset>
+          <div class="games" id="biz" data-title="Бизнес" hidden><fieldset>
             <legend>Кое те вълнува? <span class="hint">(маркирай всички)</span></legend>
             <div class="choices">
-              <label class="choice"><input type="checkbox" name="biznes_treiding" value="да"><span>Трейдинг</span></label>
-              <label class="choice"><input type="checkbox" name="biznes_startap" value="да"><span>Бизнес и стартъпи</span></label>
-              <label class="choice"><input type="checkbox" name="biznes_marketing" value="да"><span>Маркетинг и соцмрежи</span></label>
-              <label class="choice"><input type="checkbox" name="biznes_investicii" value="да"><span>Инвестиции</span></label>
-              <label class="choice"><input type="checkbox" name="biznes_friilans" value="да"><span>Фрийланс и странични доходи</span></label>
+              <label class="choice"><input type="checkbox" value="Трейдинг"><span>Трейдинг</span></label>
+              <label class="choice"><input type="checkbox" value="Бизнес и стартъпи"><span>Бизнес и стартъпи</span></label>
+              <label class="choice"><input type="checkbox" value="Маркетинг и соцмрежи"><span>Маркетинг и соцмрежи</span></label>
+              <label class="choice"><input type="checkbox" value="Инвестиции"><span>Инвестиции</span></label>
+              <label class="choice"><input type="checkbox" value="Фрийланс и странични доходи"><span>Фрийланс и странични доходи</span></label>
             </div>
             <div class="field">
               <label for="biznes-drugo">Друго</label>
-              <input type="text" id="biznes-drugo" name="biznes_drugo" placeholder="напр. крипто, недвижими имоти">
+              <input type="text" id="biznes-drugo" placeholder="напр. крипто, недвижими имоти">
             </div>
           </fieldset></div>
-          <div class="games" id="sports" hidden><fieldset>
+          <div class="games" id="sports" data-title="Спорт" hidden><fieldset>
             <legend>Какъв спорт? <span class="hint">(маркирай всички)</span></legend>
             <div class="choices">
-              <label class="choice"><input type="checkbox" name="sport_futbol" value="да"><span>Футбол</span></label>
-              <label class="choice"><input type="checkbox" name="sport_basketbol" value="да"><span>Баскетбол</span></label>
-              <label class="choice"><input type="checkbox" name="sport_voleibol" value="да"><span>Волейбол</span></label>
-              <label class="choice"><input type="checkbox" name="sport_fitnes" value="да"><span>Фитнес</span></label>
+              <label class="choice"><input type="checkbox" value="Футбол"><span>Футбол</span></label>
+              <label class="choice"><input type="checkbox" value="Баскетбол"><span>Баскетбол</span></label>
+              <label class="choice"><input type="checkbox" value="Волейбол"><span>Волейбол</span></label>
+              <label class="choice"><input type="checkbox" value="Фитнес"><span>Фитнес</span></label>
             </div>
             <div class="field">
               <label for="sport-drug">Друг спорт</label>
-              <input type="text" id="sport-drug" name="sport_drug" placeholder="напр. падел, бягане">
+              <input type="text" id="sport-drug" placeholder="напр. падел, бягане">
             </div>
           </fieldset></div>
-          <div class="games" id="games" hidden><fieldset>
+          <div class="games" id="games" data-title="PS5" hidden><fieldset>
             <legend>Какво играеш на PS5? <span class="hint">(маркирай всички)</span></legend>
             <div class="choices">
-              <label class="choice"><input type="checkbox" name="igra_fc" value="да"><span>EA Sports FC</span></label>
-              <label class="choice"><input type="checkbox" name="igra_mk" value="да"><span>Mortal Kombat</span></label>
-              <label class="choice"><input type="checkbox" name="igra_tekken" value="да"><span>Tekken</span></label>
-              <label class="choice"><input type="checkbox" name="igra_ufc" value="да"><span>UFC</span></label>
-              <label class="choice"><input type="checkbox" name="igra_cod" value="да"><span>Call of Duty</span></label>
+              <label class="choice"><input type="checkbox" value="EA Sports FC"><span>EA Sports FC</span></label>
+              <label class="choice"><input type="checkbox" value="Mortal Kombat"><span>Mortal Kombat</span></label>
+              <label class="choice"><input type="checkbox" value="Tekken"><span>Tekken</span></label>
+              <label class="choice"><input type="checkbox" value="UFC"><span>UFC</span></label>
+              <label class="choice"><input type="checkbox" value="Call of Duty"><span>Call of Duty</span></label>
             </div>
             <div class="field">
               <label for="igra-drugi">Друга игра</label>
-              <input type="text" id="igra-drugi" name="igra_drugi" placeholder="напр. NBA 2K">
+              <input type="text" id="igra-drugi" placeholder="напр. NBA 2K">
             </div>
           </fieldset></div>
         </fieldset>
+
+        <div class="hidden" aria-hidden="true">
+          <label for="f-interesi">Интереси</label><input type="text" id="f-interesi" name="interesi" tabindex="-1">
+          <label for="f-podrobno">Подробно</label><input type="text" id="f-podrobno" name="podrobno" tabindex="-1">
+        </div>
 
         <div class="field">
           <label for="area">Квартал или общежитие</label>
@@ -374,19 +379,21 @@
         <fieldset>
           <legend>Кои дати ти е удобно? <span class="hint">(маркирай всички)</span></legend>
           <div class="choices dates" id="dates"></div>
-          <input type="hidden" name="dati" id="dati" value="">
+          <div class="hidden" aria-hidden="true"><label for="dati">Дати</label><input type="text" name="dati" id="dati" tabindex="-1"></div>
         </fieldset>
 
         <fieldset>
           <legend>Ще дойдеш сам или с приятел?</legend>
           <div class="choices">
-            <label class="choice"><input type="radio" name="s_kogo" value="сам"><span>Сам</span></label>
-            <label class="choice"><input type="radio" name="s_kogo" value="с приятел"><span>С приятел</span></label>
+            <label class="choice"><input type="radio" data-group="s_kogo" value="сам"><span>Сам</span></label>
+            <label class="choice"><input type="radio" data-group="s_kogo" value="с приятел"><span>С приятел</span></label>
           </div>
         </fieldset>
+        <div class="hidden" aria-hidden="true"><label for="f-skogo">С кого</label><input type="text" id="f-skogo" name="s_kogo" tabindex="-1"></div>
 
-        <label class="check"><input type="checkbox" name="pulnoleten" value="да" id="age" required><span>Навършил съм 18 години.</span></label>
-        <label class="check"><input type="checkbox" name="saglasie" value="да" id="consent" required><span>Съгласен съм да ми пишете или звъните за сбирки. Използваме данните ти само за това и ги изтриваме, когато поискаш.</span></label>
+        <label class="check"><input type="checkbox" value="да" id="age" required><span>Навършил съм 18 години.</span></label>
+        <label class="check"><input type="checkbox" value="да" id="consent" required><span>Съгласен съм да ми пишете или звъните за сбирки. Използваме данните ти само за това и ги изтриваме, когато поискаш.</span></label>
+        <div class="hidden" aria-hidden="true"><label for="f-potvardeno">Потвърдено</label><input type="text" id="f-potvardeno" name="potvardeno" tabindex="-1"></div>
 
         <p class="error" id="form-error" role="alert"></p>
         <div><button class="btn" type="submit" id="submit-btn">Запиши ме</button></div>
@@ -459,20 +466,49 @@
     datiField.value = picked.join(', ');
   });
 
+  // "Сам / С приятел": only one can be on
+  var radios = form.querySelectorAll('[data-group="s_kogo"]');
+  radios.forEach(function (r) {
+    r.addEventListener('change', function () {
+      radios.forEach(function (o) { if (o !== r) o.checked = false; });
+    });
+  });
+
+  function checkedValues(root, sel) {
+    var out = [];
+    root.querySelectorAll(sel).forEach(function (i) { if (i.checked) out.push(i.value); });
+    return out;
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     err.textContent = '';
 
-    var el = function (n) { return form.elements.namedItem(n); };
-    var name = el('name').value.trim().replace(/\s+/g, ' ');
-    var phone = el('phone').value.replace(/[\s\-().]/g, '');
-    var anyInterest = ['interes_biznes', 'interes_sport', 'interes_nargile', 'interes_koli', 'interes_geiming'].some(function (n) { return el(n).checked; });
+    var $ = function (id) { return document.getElementById(id); };
+    var name = $('name').value.trim().replace(/\s+/g, ' ');
+    var phone = $('phone').value.replace(/[\s\-().]/g, '');
+    var interests = checkedValues(form, '[data-interest]');
 
-    if (name.split(' ').length < 2) { err.textContent = 'Напиши име и фамилия.'; el('name').focus(); return; }
-    if (!/^(\+359|0)8[7-9]\d{7}$/.test(phone)) { err.textContent = 'Напиши телефон във формат 0888 123 456.'; el('phone').focus(); return; }
-    if (!anyInterest) { err.textContent = 'Избери поне един интерес.'; return; }
-    if (!el('pulnoleten').checked) { err.textContent = 'Сбирките са само за хора над 18 години.'; return; }
-    if (!el('saglasie').checked) { err.textContent = 'Потвърди, че можем да се свържем с теб за сбирки.'; return; }
+    if (name.split(' ').length < 2) { err.textContent = 'Напиши име и фамилия.'; $('name').focus(); return; }
+    if (!/^(\+359|0)8[7-9]\d{7}$/.test(phone)) { err.textContent = 'Напиши телефон във формат 0888 123 456.'; $('phone').focus(); return; }
+    if (!interests.length) { err.textContent = 'Избери поне един интерес.'; return; }
+    if (!$('age').checked) { err.textContent = 'Сбирките са само за хора над 18 години.'; return; }
+    if (!$('consent').checked) { err.textContent = 'Потвърди, че можем да се свържем с теб за сбирки.'; return; }
+
+    // Build the short summary Netlify stores
+    var details = [];
+    form.querySelectorAll('.games[data-title]').forEach(function (box) {
+      if (box.hidden) return;
+      var picked = checkedValues(box, 'input[type="checkbox"]');
+      var other = box.querySelector('input[type="text"]').value.trim();
+      if (other) picked.push(other);
+      if (picked.length) details.push(box.getAttribute('data-title') + ': ' + picked.join(', '));
+    });
+    $('name').value = name;
+    $('f-interesi').value = interests.join(', ');
+    $('f-podrobno').value = details.join('; ');
+    $('f-skogo').value = checkedValues(form, '[data-group="s_kogo"]').join('');
+    $('f-potvardeno').value = '18+, съгласен да се свържем с него';
 
     btn.disabled = true;
     btn.textContent = 'Записваме…';
