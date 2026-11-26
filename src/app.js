@@ -53,6 +53,10 @@ function renderAuth(mode = location.hash === '#signup' ? 'signup' : 'login', not
         <label for="password">Парола ${isSignup ? '<span class="hint">(поне 8 символа)</span>' : ''}</label>
         <input type="password" id="password" autocomplete="${isSignup ? 'new-password' : 'current-password'}" minlength="8" required>
       </div>
+      ${isSignup ? `<div class="field">
+        <label for="password2">Повтори паролата</label>
+        <input type="password" id="password2" autocomplete="new-password" minlength="8" required>
+      </div>` : ''}
       <p class="error" id="auth-error" role="alert"></p>
       <div class="actions">
         <button class="btn" type="submit">${isSignup ? 'Създай профил' : 'Влез'}</button>
@@ -84,6 +88,12 @@ function renderAuth(mode = location.hash === '#signup' ? 'signup' : 'login', not
     err.textContent = '';
     if (!/^\S+@\S+\.\S+$/.test(email)) { err.textContent = 'Напиши валиден имейл.'; return; }
     if (password.length < 8) { err.textContent = 'Паролата трябва да е поне 8 символа.'; return; }
+    if (isSignup && password !== $('#password2').value) {
+      err.textContent = 'Двете пароли не съвпадат. Напиши ги отново.';
+      $('#password2').value = '';
+      $('#password2').focus();
+      return;
+    }
     const btn = e.submitter;
     btn.disabled = true;
     try {
@@ -373,6 +383,10 @@ function renderNewPassword() {
         <label for="newpw">Нова парола <span class="hint">(поне 8 символа)</span></label>
         <input type="password" id="newpw" autocomplete="new-password" minlength="8" required>
       </div>
+      <div class="field">
+        <label for="newpw2">Повтори новата парола</label>
+        <input type="password" id="newpw2" autocomplete="new-password" minlength="8" required>
+      </div>
       <p class="error" id="pw-error" role="alert"></p>
       <div><button class="btn" type="submit">Запази паролата</button></div>
     </form>
@@ -381,6 +395,7 @@ function renderNewPassword() {
     e.preventDefault();
     const pw = $('#newpw').value;
     if (pw.length < 8) { $('#pw-error').textContent = 'Паролата трябва да е поне 8 символа.'; return; }
+    if (pw !== $('#newpw2').value) { $('#pw-error').textContent = 'Двете пароли не съвпадат. Напиши ги отново.'; return; }
     try {
       await updateUser({ password: pw });
       start();
