@@ -98,6 +98,17 @@ function renderAuth(mode = location.hash === '#signup' ? 'signup' : 'login', not
     btn.disabled = true;
     try {
       if (isSignup) {
+        const problem = await emailProblem(email);
+        if (problem) {
+          err.innerHTML = problem;
+          $('#use-suggestion')?.addEventListener('click', (ev) => {
+            $('#email').value = ev.currentTarget.dataset.email;
+            err.textContent = '';
+          });
+          btn.disabled = false;
+          $('#email').focus();
+          return;
+        }
         await signup(email, password);
         // Ако в Netlify е включено автоматично потвърждение, човекът вече е влязъл
         if (await getUser().catch(() => null)) return start();
@@ -111,6 +122,22 @@ function renderAuth(mode = location.hash === '#signup' ? 'signup' : 'login', not
       btn.disabled = false;
     }
   });
+}
+
+// Проверява имейла на сървъра. Връща HTML със съобщение или празно, ако е наред.
+async function emailProblem(email) {
+  let r;
+  try {
+    r = await api(`/api/check-email?e=${encodeURIComponent(email)}`);
+  } catch {
+    return ''; // ако проверката не работи, не спираме регистрацията
+  }
+  if (r.ok) return '';
+  if (r.reason === 'typo') {
+    return `Несъществуващ имейл. Имаше ли предвид <button type="button" class="link-btn" id="use-suggestion" data-email="${esc(r.suggestion)}">${esc(r.suggestion)}</button>?`;
+  }
+  if (r.reason === 'disposable') return 'Временни имейли не се приемат. Използвай истинския си имейл.';
+  return 'Несъществуващ имейл. Провери дали е написан правилно.';
 }
 
 /* ---------- Профил ---------- */
