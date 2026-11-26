@@ -42,8 +42,11 @@ export function authMessage(err) {
   const text = String(err?.message || '').toLowerCase();
   if (err?.name === 'MissingIdentityError' || text.includes('identity'))
     return 'Регистрацията още не е включена. Опитай по-късно.';
-  if (text.includes('invalid') && text.includes('grant')) return 'Грешен имейл или парола.';
-  if (text.includes('not confirmed')) return 'Първо потвърди имейла си от линка, който ти изпратихме.';
+  // Първо непотвърденият имейл: Netlify го връща като "invalid_grant", също като грешна парола
+  if (text.includes('not confirmed') || text.includes('confirm'))
+    return 'Първо потвърди имейла си от линка, който ти изпратихме. Провери и папка Спам.';
+  if (text.includes('invalid') || text.includes('no user') || text.includes('grant'))
+    return 'Грешен имейл или парола. Ако току-що си се регистрирал, първо потвърди имейла от линка, който ти изпратихме.';
   if (text.includes('already') || text.includes('registered')) return 'Има профил с този имейл. Влез в него.';
   if (text.includes('password')) return 'Паролата трябва да е поне 8 символа.';
   return 'Нещо се обърка. Опитай пак.';

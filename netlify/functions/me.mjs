@@ -1,6 +1,6 @@
 // /api/me: профилът на влезлия потребител (виж, запиши, изтрий)
 import { admin } from '@netlify/identity';
-import { data, selfies, json, fail, currentUser, isAdmin, readJson, ageFrom, NICHES } from '../../lib/shared.mjs';
+import { data, selfies, json, fail, currentUser, isAdmin, readJson, ageFrom, NICHES, deleteUserData } from '../../lib/shared.mjs';
 
 const PHONE = /^(\+359|0)8[7-9]\d{7}$/;
 
@@ -69,12 +69,7 @@ export default async (req) => {
 
   if (req.method === 'DELETE') {
     // Изтрива всичко за човека: профил, снимка, записвания и самия акаунт
-    const { blobs } = await store.list({ prefix: 'rsvps/' });
-    await Promise.all(
-      blobs.filter((b) => b.key.endsWith(`/${user.id}`)).map((b) => store.delete(b.key)),
-    );
-    await store.delete(key);
-    await selfies().delete(user.id);
+    await deleteUserData(user.id);
     try {
       await admin.deleteUser(user.id);
     } catch {
