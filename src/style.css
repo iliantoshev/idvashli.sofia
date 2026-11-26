@@ -37,8 +37,9 @@ img { max-width: 100%; display: block; }
 .top-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 
 main.wrap { padding-top: 36px; padding-bottom: 64px; }
-.file-btn { justify-self: start; cursor: pointer; }
-#selfie:focus-visible + .file-btn { outline: 3px solid var(--amber); outline-offset: 3px; }
+.selfie-btn { width: 100%; min-height: 64px; font-size: 18px; cursor: pointer; }
+.selfie-btn .cam { width: 26px; height: 26px; flex: none; }
+#selfie:focus-visible + .selfie-btn { outline: 3px solid var(--amber); outline-offset: 3px; }
 h1, h2, h3 { font-family: var(--display); font-weight: 800; line-height: 1.15; margin: 0 0 16px; }
 h1 { font-size: clamp(26px, 6vw, 36px); }
 h2 { font-size: clamp(20px, 4.6vw, 26px); }
@@ -133,3 +134,4 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); color: var(--m
 footer p { margin: 0 0 6px; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#verify-form { margin-top: 28px; }

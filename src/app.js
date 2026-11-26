@@ -217,13 +217,14 @@ async function renderVerify() {
     <form id="verify-form" class="stack" novalidate>
       <div class="field">
         <input type="file" id="selfie" class="visually-hidden" accept="image/*" capture="user">
-        <label for="selfie" class="btn ghost file-btn" id="selfie-label">Направи или избери селфи</label>
+        <label for="selfie" class="btn selfie-btn" id="selfie-label"><svg class="cam" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Направи селфи</span></label>
+        <span class="muted small" id="selfie-hint">Натисни бутона, за да се отвори камерата.</span>
       </div>
       <img id="preview" class="preview" alt="Преглед на селфито" hidden>
       <p class="muted small">Снимката я вижда само организаторът и се изтрива веднага след проверката. Не пазим снимки и не използваме лицево разпознаване.</p>
       <p class="error" id="verify-error" role="alert"></p>
       <div class="actions">
-        <button class="btn" type="submit">Изпрати за проверка</button>
+        <button class="btn" type="submit" id="send-selfie" hidden>Изпрати за проверка</button>
         <button class="btn ghost" type="button" id="edit">Редактирай профила</button>
       </div>
     </form>
@@ -241,7 +242,11 @@ async function renderVerify() {
       const pv = $('#preview');
       pv.src = URL.createObjectURL(blob);
       pv.hidden = false;
-      $('#selfie-label').textContent = 'Смени снимката';
+      // След снимката основният бутон става "Изпрати", а камерата минава на втори план
+      $('#selfie-label').classList.add('ghost');
+      $('#selfie-label span').textContent = 'Направи ново селфи';
+      $('#selfie-hint').textContent = 'Виж дали лицето и жестът се виждат ясно и изпрати.';
+      $('#send-selfie').hidden = false;
     } catch (ex) {
       err.textContent = ex.message;
     }
