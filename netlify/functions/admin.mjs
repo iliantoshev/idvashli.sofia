@@ -75,6 +75,12 @@ export default async (req) => {
       return json({ meetups: out });
     }
 
+    if (view === 'survey') {
+      const responses = await listJson(store, 'survey/');
+      responses.sort((a, b) => a.at.localeCompare(b.at));
+      return json({ responses });
+    }
+
     return fail('Непознат изглед.');
   }
 

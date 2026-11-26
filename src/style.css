@@ -135,3 +135,29 @@ footer p { margin: 0 0 6px; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 #verify-form { margin-top: 28px; }
+
+/* Анкета */
+.progress { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; margin-bottom: 28px; }
+.progress span { display: block; height: 100%; background: var(--amber); transition: width .25s; }
+.opts { display: grid; gap: 10px; margin-top: 6px; }
+.opt {
+  position: relative; display: flex; align-items: center; gap: 14px;
+  min-height: 58px; padding: 12px 18px;
+  background: var(--night-2); border: 1.5px solid var(--line); border-radius: 16px;
+  font-weight: 600; cursor: pointer;
+}
+.opt:hover { border-color: var(--mist); }
+.opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.opt .mark { width: 22px; height: 22px; flex: none; border: 2px solid var(--mist); border-radius: 50%; }
+.opt .mark.box { border-radius: 6px; }
+.opt.on { border-color: var(--amber); background: #2A2A2E; }
+.opt.on .mark { border-color: var(--amber); background: var(--amber); box-shadow: inset 0 0 0 4px var(--night-2); }
+.opt input:focus-visible ~ .mark { outline: 3px solid var(--amber); outline-offset: 3px; }
+#survey legend h2 { margin-bottom: 6px; }
+
+/* Резултати от анкетата в админ панела */
+.result-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; }
+.result-row + .result-row { margin-top: 12px; }
+.bar { grid-column: 1 / -1; height: 10px; background: var(--night); border-radius: 999px; overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--amber); }
+.result-num { font-weight: 700; white-space: nowrap; }

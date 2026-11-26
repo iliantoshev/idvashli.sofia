@@ -11,6 +11,7 @@ export default defineConfig({
         admin: resolve(import.meta.dirname, 'admin.html'),
         venue: resolve(import.meta.dirname, 'venue.html'),
         privacy: resolve(import.meta.dirname, 'privacy.html'),
+        anketa: resolve(import.meta.dirname, 'anketa.html'),
       },
     },
   },

@@ -2,6 +2,7 @@
 import { getUser } from '@netlify/identity';
 import QRCode from 'qrcode';
 import { esc, api, postJson, formatWhen, $, $$ } from './ui.js';
+import { SURVEY } from '../lib/survey.mjs';
 
 const NICHES = { biznes: 'Бизнес и пари', sport: 'Спорт', nargile: 'Наргиле и чил', koli: 'Коли', geiming: 'Гейминг' };
 const AUDIENCES = { all: 'Смесена група', m: 'Само мъже', f: 'Само жени' };
@@ -17,6 +18,7 @@ async function shell() {
       <button type="button" role="tab" data-tab="pending" aria-selected="${tab === 'pending'}">Проверки</button>
       <button type="button" role="tab" data-tab="meetups" aria-selected="${tab === 'meetups'}">Сбирки</button>
       <button type="button" role="tab" data-tab="venues" aria-selected="${tab === 'venues'}">Заведения</button>
+      <button type="button" role="tab" data-tab="survey" aria-selected="${tab === 'survey'}">Анкета</button>
     </div>
     <p class="error" id="admin-error" role="alert"></p>
     <div id="panel"><p class="muted">Зареждаме…</p></div>`;
@@ -26,6 +28,7 @@ async function shell() {
     if (tab === 'pending') await pending(panel);
     if (tab === 'meetups') await meetups(panel);
     if (tab === 'venues') await venues(panel);
+    if (tab === 'survey') await survey(panel);
   } catch (ex) {
     $('#admin-error').textContent = ex.message;
   }
@@ -183,6 +186,69 @@ async function venues(panel) {
       $('#v-error').textContent = ex.message;
     }
   });
+}
+
+/* ---------- Анкета ---------- */
+
+const pct = (n, total) => (total ? Math.round((n / total) * 100) : 0);
+
+function rows(q, list) {
+  const total = list.length;
+  return q.options.map((label, i) => {
+    const n = list.filter((r) => [].concat(r.answers[q.id]).includes(i)).length;
+    return `
+      <div class="result-row">
+        <span>${esc(label)}</span>
+        <span class="result-num">${n} (${pct(n, total)}%)</span>
+        <div class="bar"><span style="width:${pct(n, total)}%"></span></div>
+      </div>`;
+  }).join('');
+}
+
+function csv(responses) {
+  const cell = (v) => `"${String(v).replace(/"/g, '""')}"`;
+  const head = [...SURVEY.map((q) => q.text), 'Откъде', 'Кога'];
+  const lines = responses.map((r) => [
+    ...SURVEY.map((q) => [].concat(r.answers[q.id]).map((i) => q.options[i]).join('; ')),
+    r.src || '', r.at,
+  ]);
+  return '﻿' + [head, ...lines].map((l) => l.map(cell).join(',')).join('\r\n');
+}
+
+async function survey(panel) {
+  const { responses } = await api('/api/admin?view=survey');
+  const total = responses.length;
+  if (!total) {
+    panel.innerHTML = `<div class="card"><p>Още няма попълнени анкети.</p>
+      <p class="small">Линк за споделяне: <a href="/anketa" target="_blank" rel="noopener">${esc(location.origin)}/anketa</a></p></div>`;
+    return;
+  }
+
+  const often = responses.filter((r) => r.answers.q2 >= 2).length;
+  const women = responses.filter((r) => r.answers.q9 === 1);
+  const men = responses.filter((r) => r.answers.q9 === 0);
+  const url = URL.createObjectURL(new Blob([csv(responses)], { type: 'text/csv;charset=utf-8' }));
+
+  panel.innerHTML = `
+    <div class="card stack">
+      <div>
+        <h2>${total} ${total === 1 ? 'попълнена анкета' : 'попълнени анкети'}</h2>
+        <p>Искало им се е да излязат и не са намерили с кого 3 или повече пъти миналия месец: <strong>${often} (${pct(often, total)}%)</strong></p>
+        <p class="muted small">Линк за споделяне: <a href="/anketa" target="_blank" rel="noopener">${esc(location.origin)}/anketa</a></p>
+      </div>
+      <div><a class="btn ghost small" href="${url}" download="anketa-idvashli.csv">Свали всички отговори (CSV)</a></div>
+    </div>
+    <div class="list" style="margin-top:14px">
+      ${SURVEY.map((q, n) => `
+        <article class="card">
+          <h3>${n + 1}. ${esc(q.text)}</h3>
+          ${q.type === 'many' ? '<p class="muted small">Може няколко отговора, затова процентите не се събират до 100%.</p>' : ''}
+          ${rows(q, responses)}
+          ${q.id === 'q6' && (women.length || men.length) ? `
+            <h3 style="margin-top:24px">Само жените (${women.length})</h3>${rows(q, women)}
+            <h3 style="margin-top:24px">Само мъжете (${men.length})</h3>${rows(q, men)}` : ''}
+        </article>`).join('')}
+    </div>`;
 }
 
 /* ---------- Достъп ---------- */

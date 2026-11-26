@@ -142,6 +142,16 @@ async function emailProblem(email) {
 
 /* ---------- Профил ---------- */
 
+// Ако човекът е попълнил анкетата на този телефон, попълваме пола и интересите от нея
+function surveyPrefill() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('idvashli-prefill') || 'null');
+    return saved && typeof saved === 'object' ? { gender: saved.gender, interests: saved.interests || [] } : {};
+  } catch {
+    return {};
+  }
+}
+
 function renderProfileForm(profile = {}, isEdit = false) {
   setTopActions(true);
   const year = new Date().getFullYear();
@@ -437,7 +447,7 @@ function renderNewPassword() {
 async function route() {
   try {
     const p = me.profile;
-    if (!p) return renderProfileForm();
+    if (!p) return renderProfileForm(surveyPrefill());
     if (p.status === 'verified') return await renderMeetups();
     if (p.status === 'pending') return renderPending();
     return await renderVerify();

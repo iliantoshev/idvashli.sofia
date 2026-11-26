@@ -6,6 +6,12 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Кратък адрес за анкетата: idvashli.netlify.app/anketa
+[[redirects]]
+  from = "/anketa"
+  to = "/anketa.html"
+  status = 200
+
 # Страниците с профили, админ и заведения не трябва да се показват в Google
 [[headers]]
   for = "/app.html"
