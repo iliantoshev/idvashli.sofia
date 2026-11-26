@@ -88,8 +88,9 @@ function renderAuth(mode = location.hash === '#signup' ? 'signup' : 'login', not
     btn.disabled = true;
     try {
       if (isSignup) {
-        const user = await signup(email, password);
-        if (user?.confirmedAt || user?.emailConfirmed) return start();
+        await signup(email, password);
+        // Ако в Netlify е включено автоматично потвърждение, човекът вече е влязъл
+        if (await getUser().catch(() => null)) return start();
         renderAuth('login', 'Изпратихме ти имейл. Отвори линка в него, за да потвърдиш профила, и после влез тук.');
       } else {
         await login(email, password);
