@@ -206,7 +206,11 @@ function rows(q, list) {
 }
 
 function csv(responses) {
-  const cell = (v) => `"${String(v).replace(/"/g, '""')}"`;
+  // Текст, който започва с = + - @, Excel може да го изпълни като формула. Слагаме ' отпред.
+  const cell = (v) => {
+    const text = /^[=+\-@\t\r]/.test(String(v)) ? `'${v}` : String(v);
+    return `"${text.replace(/"/g, '""')}"`;
+  };
   const head = [...SURVEY.map((q) => q.text), 'Откъде', 'Кога'];
   const lines = responses.map((r) => [
     ...SURVEY.map((q) => [].concat(r.answers[q.id]).map((i) => q.options[i]).join('; ')),
@@ -227,6 +231,11 @@ async function survey(panel) {
   const often = responses.filter((r) => r.answers.q2 >= 2).length;
   const women = responses.filter((r) => r.answers.q9 === 1);
   const men = responses.filter((r) => r.answers.q9 === 0);
+  const bySource = Object.entries(responses.reduce((acc, r) => {
+    const key = r.src || 'без източник';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {})).sort((a, b) => b[1] - a[1]);
   const url = URL.createObjectURL(new Blob([csv(responses)], { type: 'text/csv;charset=utf-8' }));
 
   panel.innerHTML = `
@@ -235,6 +244,15 @@ async function survey(panel) {
         <h2>${total} ${total === 1 ? 'попълнена анкета' : 'попълнени анкети'}</h2>
         <p>Искало им се е да излязат и не са намерили с кого 3 или повече пъти миналия месец: <strong>${often} (${pct(often, total)}%)</strong></p>
         <p class="muted small">Линк за споделяне: <a href="/anketa" target="_blank" rel="noopener">${esc(location.origin)}/anketa</a></p>
+      </div>
+      <div>
+        <h3>От кой линк</h3>
+        ${bySource.map(([name, n]) => `
+          <div class="result-row">
+            <span>${esc(name)}</span>
+            <span class="result-num">${n} (${pct(n, total)}%)</span>
+            <div class="bar"><span style="width:${pct(n, total)}%"></span></div>
+          </div>`).join('')}
       </div>
       <div><a class="btn ghost small" href="${url}" download="anketa-idvashli.csv">Свали всички отговори (CSV)</a></div>
     </div>

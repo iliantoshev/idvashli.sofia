@@ -4,7 +4,10 @@ import { esc, postJson, $, $$ } from './ui.js';
 
 const root = $('#survey');
 const answers = {};
-const src = new URLSearchParams(location.search).get('src') || '';
+// Откъде идва човекът: всичко след "src=" (може и на кирилица, с интервали и т.н.).
+// Ако линкът е без src, пазим целия текст след "?", за да не губим нищо.
+const params = new URLSearchParams(location.search);
+const src = (params.get('src') ?? [...params].map(([k, v]) => (v ? `${k}=${v}` : k)).join('&')).trim().slice(0, 80);
 const SIGNUP = '/app.html#signup';
 let step = 0;
 
