@@ -3,20 +3,15 @@
 //     своята снимка; организаторът; или и двамата сте записани за сбирка m
 // PUT (image/jpeg)                 качва или сменя своята снимка
 import {
-  data, photos, json, fail, currentUser, isAdmin, readJson,
+  data, photos, json, fail, currentUser, isAdmin, readJson, sharedMeetup,
 } from '../../lib/shared.mjs';
 
 const MAX_BYTES = 2 * 1024 * 1024;
 
 async function canSee(store, viewer, userId, meetupId) {
   if (viewer.id === userId || isAdmin(viewer)) return true;
-  if (!meetupId) return false;
-  const [mine, theirs, profile] = await Promise.all([
-    store.get(`rsvps/${meetupId}/${viewer.id}`),
-    store.get(`rsvps/${meetupId}/${userId}`),
-    readJson(store, `profiles/${viewer.id}`),
-  ]);
-  return Boolean(mine && theirs && profile?.status === 'verified');
+  // След като сбирката мине, снимката вече не се вижда
+  return sharedMeetup(store, viewer.id, userId, meetupId);
 }
 
 export default async (req) => {

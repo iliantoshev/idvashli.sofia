@@ -55,6 +55,7 @@ export default async (req) => {
       instagram,
       area,
       interests,
+      showInstagram: Boolean(body.showInstagram && instagram),
       status,
       updatedAt: new Date().toISOString(),
     };

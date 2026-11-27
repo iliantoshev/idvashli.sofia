@@ -178,9 +178,11 @@ footer p { margin: 0 0 6px; }
 .photo-pick { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; }
 .rules { margin: 0 0 4px; padding-left: 20px; display: grid; gap: 4px; }
 .people { display: flex; flex-wrap: wrap; gap: 14px 16px; padding-top: 6px; border-top: 1px solid var(--line); }
-.person { margin: 10px 0 0; display: grid; justify-items: center; gap: 6px; width: 72px; text-align: center; font-size: 14px; font-weight: 700; line-height: 1.25; }
-.person figcaption { display: grid; overflow-wrap: anywhere; }
-.person figcaption .muted { font-weight: 600; font-size: 13px; }
+.person { margin: 10px 0 0; display: grid; justify-items: center; gap: 6px; width: 72px; text-align: center; font-size: 14px; font-weight: 700; line-height: 1.25; color: var(--cream); text-decoration: none; border-radius: 12px; }
+.person:hover { color: var(--cream); }
+.person:hover .avatar { border-color: var(--amber); }
+.person-name { display: grid; overflow-wrap: anywhere; }
+.person-name .muted { font-weight: 600; font-size: 13px; }
 .list > .card + .card { margin-top: 0; }
 .me-row { display: flex; align-items: center; gap: 16px; }
 .me-row p { margin: 4px 0 0; }

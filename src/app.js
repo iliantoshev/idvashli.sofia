@@ -204,6 +204,7 @@ function renderProfileForm(profile = {}, isEdit = false) {
       <div class="field">
         <label for="instagram">Instagram <span class="hint">(по желание)</span></label>
         <input type="text" id="instagram" autocapitalize="off" value="${esc(profile.instagram)}" placeholder="напр. ivan.petrov">
+        <label class="check"><input type="checkbox" id="showInstagram" ${profile.showInstagram ? 'checked' : ''}><span>Покажи Instagram-а ми на хората от сбирките, за които съм записан.</span></label>
       </div>
       <fieldset>
         <legend>Какво те интересува? <span class="hint">(избери едно или повече)</span></legend>
@@ -236,6 +237,7 @@ function renderProfileForm(profile = {}, isEdit = false) {
       birthYear: Number($('#birthYear').value),
       phone: $('#phone').value,
       instagram: $('#instagram').value,
+      showInstagram: $('#showInstagram').checked,
       area: $('#area').value,
       interests: $$('input[name="interests"]:checked').map((i) => i.value),
       adult: $('#adult').checked,
@@ -447,10 +449,10 @@ async function renderMeetups(message = '') {
         ${m.people ? `
           <div class="people">
             ${m.people.map((x) => `
-              <figure class="person">
-                <div class="avatar">${x.photo ? `<img src="${photoUrl(x.id, x.photo, m.id)}" alt="${esc(x.firstName)}" loading="lazy">` : '<span aria-hidden="true">?</span>'}</div>
-                <figcaption>${x.me ? 'Ти' : esc(x.firstName)}<span class="muted">${esc(x.age)} г.</span></figcaption>
-              </figure>`).join('')}
+              <a class="person" href="${x.me ? '#profil' : `#chovek/${encodeURIComponent(m.id)}/${encodeURIComponent(x.id)}`}" aria-label="${x.me ? 'Моят профил' : `Профилът на ${esc(x.firstName)}`}">
+                <span class="avatar">${x.photo ? `<img src="${photoUrl(x.id, x.photo, m.id)}" alt="" loading="lazy">` : '<span aria-hidden="true">?</span>'}</span>
+                <span class="person-name">${x.me ? 'Ти' : esc(x.firstName)}<span class="muted">${esc(x.age)} г.</span></span>
+              </a>`).join('')}
           </div>` : '<p class="muted small">Кой идва, виждаш след като натиснеш „Идвам“. Ако не ти харесва компанията, можеш да се отпишеш.</p>'}
       </article>`;
   }).join('');
@@ -473,6 +475,43 @@ async function renderMeetups(message = '') {
       b.disabled = false;
     }
   }));
+}
+
+/* ---------- Профилът на друг участник ---------- */
+
+async function renderPerson(meetupId, userId) {
+  setTopActions(true);
+  setView('profile');
+  let x;
+  try {
+    x = await api(`/api/person?u=${encodeURIComponent(userId)}&m=${encodeURIComponent(meetupId)}`);
+  } catch (ex) {
+    if (ex.status === 401) throw ex;
+    render(`
+      <p><a href="#" class="back-link">← Към сбирките</a></p>
+      <h1>Профилът не се вижда</h1>
+      <p class="muted">${esc(ex.message)}</p>`);
+    return;
+  }
+  render(`
+    <p><a href="#" class="back-link">← Към сбирките</a></p>
+    <div class="profile-head">
+      <div class="avatar xl">${x.photo ? `<img src="${photoUrl(x.id, x.photo, meetupId)}" alt="Снимката на ${esc(x.firstName)}">` : '<span aria-hidden="true">?</span>'}</div>
+      <div>
+        <h1>${esc(x.firstName)}</h1>
+        ${x.verified ? '<p><span class="status ok">Проверен профил</span></p>' : ''}
+        <p class="muted">${esc(x.age)} г.</p>
+      </div>
+    </div>
+    <div class="card stack">
+      <div>
+        <p class="muted small">Интереси</p>
+        <div class="meetup-row">${x.interests.map((i) => `<span class="tag">${esc(i)}</span>`).join('') || '<span class="muted">няма</span>'}</div>
+      </div>
+      ${x.instagram ? `<div><p class="muted small">Instagram</p><a href="https://www.instagram.com/${encodeURIComponent(x.instagram)}/" target="_blank" rel="noopener noreferrer">@${esc(x.instagram)}</a></div>` : ''}
+    </div>
+    <p class="muted small" style="margin-top:20px">Виждаш този профил, защото сте записани за една и съща сбирка. След сбирката той вече няма да се вижда. Не споделяй снимката и данните на други хора извън сайта.</p>
+  `);
 }
 
 /* ---------- Моят профил (от снимката горе вдясно) ---------- */
@@ -510,11 +549,11 @@ async function renderProfile() {
       <dl class="facts">
         <dt>Имейл</dt><dd>${esc(me.email)}</dd>
         <dt>Телефон</dt><dd>${esc(p.phone)}</dd>
-        <dt>Instagram</dt><dd>${p.instagram ? `@${esc(p.instagram)}` : dash}</dd>
+        <dt>Instagram</dt><dd>${p.instagram ? `@${esc(p.instagram)} <span class="muted small">(${p.showInstagram ? 'виждат го хората от сбирките ти' : 'вижда го само организаторът'})</span>` : dash}</dd>
         <dt>Квартал</dt><dd>${p.area ? esc(p.area) : dash}</dd>
         <dt>Интереси</dt><dd><div class="meetup-row">${(p.interests || []).map((k) => `<span class="tag">${esc(NICHES[k])}</span>`).join('')}</div></dd>
       </dl>
-      <p class="muted small" style="margin-top:16px">Имейла, телефона и фамилията ти вижда само организаторът. Хората от твоите сбирки виждат малкото ти име, годините и снимката.</p>
+      <p class="muted small" style="margin-top:16px">Имейла, телефона, фамилията и квартала ти вижда само организаторът. Хората от твоите сбирки виждат малкото ти име, годините, снимката и интересите${p.showInstagram ? ', и Instagram-а ти' : ''}, докато сбирката предстои.</p>
       <div class="actions">
         <button class="btn ghost small" type="button" id="edit">Редактирай профила</button>
         <button class="btn ghost small" type="button" id="edit-photo">Смени снимката</button>
@@ -608,6 +647,8 @@ async function route() {
     if (!p) return renderProfileForm(surveyPrefill());
     if (!p.photoAt) return renderPhoto();
     if (location.hash === '#profil') return await renderProfile();
+    const person = location.hash.match(/^#chovek\/([^/]+)\/([^/]+)$/);
+    if (person && p.status === 'verified') return await renderPerson(decodeURIComponent(person[1]), decodeURIComponent(person[2]));
     if (p.status === 'verified') return await renderMeetups();
     if (p.status === 'pending') return renderPending();
     return await renderVerify();
