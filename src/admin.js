@@ -3,8 +3,8 @@ import { getUser } from '@netlify/identity';
 import QRCode from 'qrcode';
 import { esc, api, postJson, formatWhen, $, $$ } from './ui.js';
 import { SURVEY } from '../lib/survey.mjs';
+import { INTEREST_GROUPS } from '../lib/interests.mjs';
 
-const NICHES = { biznes: 'Бизнес и пари', sport: 'Спорт', nargile: 'Наргиле и чил', koli: 'Коли', geiming: 'Гейминг' };
 const AUDIENCES = { all: 'Смесена група', m: 'Само мъже', f: 'Само жени' };
 const REASONS = { face: 'Лицето не се вижда', gesture: 'Грешен жест', mismatch: 'Не съвпада с профила' };
 
@@ -99,7 +99,7 @@ async function meetups(panel) {
         ${venues.length ? '' : '<p class="error">Първо добави заведение от раздел „Заведения“.</p>'}
         <div class="field"><label for="m-venue">Заведение</label>
           <select id="m-venue">${venues.map((v) => `<option value="${esc(v.id)}">${esc(v.name)}</option>`).join('')}</select></div>
-        <div class="field"><label for="m-niche">Ниша</label><select id="m-niche">${opts(NICHES)}</select></div>
+        <div class="field"><label for="m-niche">Ниша</label><select id="m-niche">${INTEREST_GROUPS.map((g) => `<optgroup label="${g.label}">${opts(g.items)}</optgroup>`).join('')}</select></div>
         <div class="field"><label for="m-when">Дата и час</label><input type="datetime-local" id="m-when"></div>
         <div class="field"><label for="m-cap">Места</label><input type="number" id="m-cap" min="2" max="50" value="6"></div>
         <div class="field"><label for="m-aud">За кого</label><select id="m-aud">${opts(AUDIENCES)}</select></div>

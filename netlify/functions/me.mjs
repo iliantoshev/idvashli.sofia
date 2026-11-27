@@ -1,6 +1,6 @@
 // /api/me: профилът на влезлия потребител (виж, запиши, изтрий)
 import { admin } from '@netlify/identity';
-import { data, selfies, json, fail, currentUser, isAdmin, readJson, ageFrom, NICHES, deleteUserData } from '../../lib/shared.mjs';
+import { data, selfies, json, fail, currentUser, isAdmin, readJson, ageFrom, isNiche, MAX_INTERESTS, deleteUserData } from '../../lib/shared.mjs';
 
 const PHONE = /^(\+359|0)8[7-9]\d{7}$/;
 
@@ -30,7 +30,7 @@ export default async (req) => {
     const phone = String(body.phone || '').replace(/[\s\-().]/g, '');
     const instagram = String(body.instagram || '').trim().replace(/^@/, '').slice(0, 40);
     const area = String(body.area || '').trim().slice(0, 60);
-    const interests = Array.isArray(body.interests) ? body.interests.filter((i) => i in NICHES) : [];
+    const interests = Array.isArray(body.interests) ? [...new Set(body.interests.filter(isNiche))] : [];
 
     if (name.split(' ').length < 2 || name.length > 60) return fail('Напиши име и фамилия.');
     if (!['m', 'f'].includes(gender)) return fail('Избери пол.');
@@ -38,6 +38,7 @@ export default async (req) => {
     if (ageFrom(birthYear) < 18 || body.adult !== true) return fail('Сбирките са само за хора над 18 години.');
     if (!PHONE.test(phone)) return fail('Напиши телефон във формат 0888 123 456.');
     if (!interests.length) return fail('Избери поне един интерес.');
+    if (interests.length > MAX_INTERESTS) return fail(`Избери най-много ${MAX_INTERESTS} интереса.`);
     if (body.privacy !== true) return fail('Трябва да се съгласиш с правилата за поверителност.');
 
     // Смяна на име, пол или година след проверка изисква нова проверка,

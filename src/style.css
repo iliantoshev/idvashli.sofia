@@ -90,6 +90,20 @@ legend { padding: 0; margin-bottom: 4px; }
 }
 .choice input:checked + span { background: var(--amber); border-color: var(--amber); color: var(--night); }
 .choice input:focus-visible + span { outline: 3px solid var(--amber); outline-offset: 3px; }
+/* Интересите в профила: групи, които се отварят */
+.interests { gap: 8px; }
+.interests input[type="search"] {
+  width: 100%; min-height: 48px; padding: 10px 16px; margin-bottom: 4px;
+  background: var(--night-2); border: 1.5px solid var(--line); border-radius: 14px;
+  color: var(--cream); font: inherit;
+}
+.interests input[type="search"]:focus { border-color: var(--amber); outline: none; }
+.interest-group { border-bottom: 1px solid var(--line); }
+.interest-group summary {
+  cursor: pointer; padding: 12px 0; font-weight: 700; list-style-position: inside;
+}
+.interest-group .choices { padding: 4px 0 16px; }
+.choice input:disabled + span { opacity: .4; cursor: not-allowed; }
 .check { display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; font-weight: 400; font-size: 15px; color: var(--mist); }
 .check input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--amber); }
 .error { color: var(--error); font-weight: 600; font-size: 15px; margin: 0; }

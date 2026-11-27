@@ -1,7 +1,7 @@
 // /api/admin: само за организатора (роля "admin" в Netlify Identity)
 import {
   data, selfies, json, fail, currentUser, isAdmin, readJson, listJson, countKeys, isUpcoming,
-  randomId, ageFrom, NICHES, AUDIENCES,
+  randomId, ageFrom, NICHES, isNiche, AUDIENCES,
 } from '../../lib/shared.mjs';
 
 const REASONS = {
@@ -132,7 +132,7 @@ export default async (req) => {
         const startsAt = new Date(body.startsAt);
         const capacity = Number(body.capacity);
         if (!venue) return fail('Избери заведение.');
-        if (!(body.niche in NICHES)) return fail('Избери ниша.');
+        if (!isNiche(body.niche)) return fail('Избери ниша.');
         if (!(body.audience in AUDIENCES)) return fail('Избери за кого е сбирката.');
         if (Number.isNaN(startsAt.getTime()) || startsAt.getTime() < Date.now()) return fail('Избери дата и час в бъдещето.');
         if (!Number.isInteger(capacity) || capacity < 2 || capacity > 50) return fail('Местата трябва да са между 2 и 50.');

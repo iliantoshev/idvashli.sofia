@@ -3,14 +3,8 @@ import {
   getUser, login, signup, logout, handleAuthCallback, requestPasswordRecovery, updateUser,
 } from '@netlify/identity';
 import { esc, api, postJson, formatWhen, authMessage, $, $$ } from './ui.js';
+import { INTEREST_GROUPS, NICHES, MAX_INTERESTS } from '../lib/interests.mjs';
 
-const NICHES = {
-  biznes: 'Бизнес и пари',
-  sport: 'Спорт',
-  nargile: 'Наргиле и чил',
-  koli: 'Коли',
-  geiming: 'Гейминг',
-};
 
 const root = $('#app');
 const topActions = $('#top-actions');
@@ -206,11 +200,20 @@ function renderProfileForm(profile = {}, isEdit = false) {
         <input type="text" id="instagram" autocapitalize="off" value="${esc(profile.instagram)}" placeholder="напр. ivan.petrov">
         <label class="check"><input type="checkbox" id="showInstagram" ${profile.showInstagram ? 'checked' : ''}><span>Покажи Instagram-а ми на хората от сбирките, за които съм записан.</span></label>
       </div>
-      <fieldset>
-        <legend>Какво те интересува? <span class="hint">(избери едно или повече)</span></legend>
-        <div class="choices">
-          ${Object.entries(NICHES).map(([k, label]) => `<label class="choice"><input type="checkbox" name="interests" value="${k}" ${chosen.has(k) ? 'checked' : ''}><span>${label}</span></label>`).join('')}
-        </div>
+      <fieldset class="interests">
+        <legend>Какво те интересува? <span class="hint">(избери едно или повече, до ${MAX_INTERESTS})</span></legend>
+        <input type="search" id="interest-search" placeholder="Търси, напр. падел" autocomplete="off" aria-label="Търси интерес">
+        <p class="hint" id="interest-count" aria-live="polite"></p>
+        ${INTEREST_GROUPS.map((g) => {
+          const picked = Object.keys(g.items).filter((k) => chosen.has(k)).length;
+          return `<details class="interest-group" ${picked ? 'open' : ''}>
+            <summary>${g.label} <span class="hint" data-group-count>${picked ? `(${picked})` : ''}</span></summary>
+            <div class="choices">
+              ${Object.entries(g.items).map(([k, label]) => `<label class="choice"><input type="checkbox" name="interests" value="${k}" ${chosen.has(k) ? 'checked' : ''}><span>${label}</span></label>`).join('')}
+            </div>
+          </details>`;
+        }).join('')}
+        <p class="hint" id="interest-empty" hidden>Няма такъв интерес. Пиши ни в Instagram и ще го добавим.</p>
       </fieldset>
       <div class="field">
         <label for="area">Квартал или общежитие</label>
@@ -226,6 +229,7 @@ function renderProfileForm(profile = {}, isEdit = false) {
     </form>
   `);
 
+  setupInterests();
   $('#cancel')?.addEventListener('click', () => route());
   $('#profile-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -254,6 +258,39 @@ function renderProfileForm(profile = {}, isEdit = false) {
       btn.disabled = false;
     }
   });
+}
+
+// Търсене в интересите и броене на избраните
+function setupInterests() {
+  const boxes = $$('input[name="interests"]');
+  const groups = $$('.interest-group');
+  const update = () => {
+    const n = boxes.filter((b) => b.checked).length;
+    $('#interest-count').textContent = n ? `Избрани: ${n}` : '';
+    boxes.forEach((b) => { b.disabled = !b.checked && n >= MAX_INTERESTS; });
+    groups.forEach((g) => {
+      const k = $$('input:checked', g).length;
+      $('[data-group-count]', g).textContent = k ? `(${k})` : '';
+    });
+  };
+  boxes.forEach((b) => b.addEventListener('change', update));
+  $('#interest-search').addEventListener('input', (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    let any = false;
+    groups.forEach((g) => {
+      let shown = 0;
+      $$('.choice', g).forEach((c) => {
+        const hit = !q || c.textContent.toLowerCase().includes(q);
+        c.hidden = !hit;
+        if (hit) shown += 1;
+      });
+      g.hidden = shown === 0;
+      if (q && shown) g.open = true;
+      any = any || shown > 0;
+    });
+    $('#interest-empty').hidden = any;
+  });
+  update();
 }
 
 /* ---------- Проверка със селфи ---------- */
