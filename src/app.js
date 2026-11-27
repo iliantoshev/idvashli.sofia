@@ -510,7 +510,6 @@ async function renderPerson(meetupId, userId) {
       </div>
       ${x.instagram ? `<div><p class="muted small">Instagram</p><a href="https://www.instagram.com/${encodeURIComponent(x.instagram)}/" target="_blank" rel="noopener noreferrer">@${esc(x.instagram)}</a></div>` : ''}
     </div>
-    <p class="muted small" style="margin-top:20px">Виждаш този профил, защото сте записани за една и съща сбирка. След сбирката той вече няма да се вижда. Не споделяй снимката и данните на други хора извън сайта.</p>
   `);
 }
 
