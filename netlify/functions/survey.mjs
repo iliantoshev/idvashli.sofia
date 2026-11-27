@@ -21,7 +21,9 @@ export default async (req) => {
   const answers = cleanAnswers(body.answers);
   if (!answers) return fail('Отговори на всички въпроси.');
 
-  const src = String(body.src || '').replace(/[^a-z0-9_-]/gi, '').slice(0, 30);
+  // Източникът е всичко след "=" в линка, на каквото и име да е (например ?src=блок 8).
+  // Махаме само контролните символи и ъглавите скоби, и режем до 40 знака.
+  const src = String(body.src || '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 40);
   await data().setJSON(`survey/${Date.now()}-${randomId(4)}`, {
     answers,
     src,

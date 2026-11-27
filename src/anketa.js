@@ -4,7 +4,7 @@ import { esc, postJson, $, $$ } from './ui.js';
 
 const root = $('#survey');
 const answers = {};
-const src = (new URLSearchParams(location.search).get('src') || '').slice(0, 30);
+const src = new URLSearchParams(location.search).get('src') || '';
 const SIGNUP = '/app.html#signup';
 let step = 0;
 
