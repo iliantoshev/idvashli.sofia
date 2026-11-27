@@ -1,6 +1,6 @@
 // /api/meetups: предстоящите сбирки и бутонът "Идвам"
 import {
-  data, json, fail, currentUser, readJson, listJson, countKeys, isUpcoming, NICHES, AUDIENCES,
+  data, json, fail, currentUser, readJson, listJson, countKeys, isUpcoming, ageFrom, NICHES, AUDIENCES,
 } from '../../lib/shared.mjs';
 
 export default async (req) => {
@@ -13,17 +13,31 @@ export default async (req) => {
     const venues = Object.fromEntries((await listJson(store, 'venues/')).map((v) => [v.id, v]));
 
     const out = await Promise.all(
-      meetups.map(async (m) => ({
-        id: m.id,
-        startsAt: m.startsAt,
-        niche: NICHES[m.niche] || m.niche,
-        audience: m.audience,
-        audienceLabel: AUDIENCES[m.audience],
-        capacity: m.capacity,
-        venue: venues[m.venueId] ? { name: venues[m.venueId].name, address: venues[m.venueId].address } : null,
-        going: await countKeys(store, `rsvps/${m.id}/`),
-        mine: user ? Boolean(await store.get(`rsvps/${m.id}/${user.id}`)) : false,
-      })),
+      meetups.map(async (m) => {
+        const { blobs } = await store.list({ prefix: `rsvps/${m.id}/` });
+        const ids = blobs.map((b) => b.key.split('/').pop());
+        const mine = Boolean(user && ids.includes(user.id));
+        // Кой идва (малко име, години, снимка) виждат само записаните за същата сбирка
+        const people = mine
+          ? (await Promise.all(ids.map(async (id) => {
+            const p = await readJson(store, `profiles/${id}`);
+            if (!p) return null;
+            return { id, firstName: p.name.split(' ')[0], age: ageFrom(p.birthYear), photo: p.photoAt || null, me: id === user.id };
+          }))).filter(Boolean)
+          : null;
+        return {
+          id: m.id,
+          startsAt: m.startsAt,
+          niche: NICHES[m.niche] || m.niche,
+          audience: m.audience,
+          audienceLabel: AUDIENCES[m.audience],
+          capacity: m.capacity,
+          venue: venues[m.venueId] ? { name: venues[m.venueId].name, address: venues[m.venueId].address } : null,
+          going: ids.length,
+          mine,
+          people,
+        };
+      }),
     );
     return json({ meetups: out });
   }
@@ -32,6 +46,7 @@ export default async (req) => {
     if (!user) return fail('Не си влязъл в профила си.', 401);
     const profile = await readJson(store, `profiles/${user.id}`);
     if (profile?.status !== 'verified') return fail('Само проверени профили могат да се записват за сбирки.', 403);
+    if (!profile.photoAt) return fail('Първо качи снимка в профила си.', 403);
 
     let body;
     try {

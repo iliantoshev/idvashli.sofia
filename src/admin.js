@@ -44,7 +44,16 @@ async function pending(panel) {
   }
   panel.innerHTML = `<div class="list">${pending.map((p) => `
     <article class="card grid-2">
-      <img src="/api/admin?selfie=${encodeURIComponent(p.id)}" alt="Селфи на ${esc(p.name)}" class="preview" loading="lazy">
+      <div class="compare">
+        <figure>
+          <img src="/api/admin?selfie=${encodeURIComponent(p.id)}" alt="Селфи на ${esc(p.name)}" class="preview" loading="lazy">
+          <figcaption class="muted small">Селфи с жест</figcaption>
+        </figure>
+        <figure>
+          ${p.photo ? `<img src="/api/photo?u=${encodeURIComponent(p.id)}&v=${encodeURIComponent(p.photo)}" alt="Профилна снимка на ${esc(p.name)}" class="preview" loading="lazy">` : '<div class="preview empty">Няма снимка</div>'}
+          <figcaption class="muted small">Профилна снимка</figcaption>
+        </figure>
+      </div>
       <div class="stack">
         <div>
           <h3>${esc(p.name)}</h3>
@@ -52,7 +61,7 @@ async function pending(panel) {
           <p>Поискан жест: <strong>${esc(p.gesture || '—')}</strong></p>
           <p class="muted small">Изпратено: ${p.submittedAt ? esc(formatWhen(p.submittedAt)) : '—'}</p>
         </div>
-        <p class="small">Провери: вижда ли се ясно лицето, правилен ли е жестът, отговаря ли на пола и възрастта.</p>
+        <p class="small">Провери: вижда ли се ясно лицето, правилен ли е жестът, същият човек ли е на профилната снимка, отговаря ли на пола и възрастта.</p>
         <div class="actions">
           <button class="btn small" type="button" data-approve="${esc(p.id)}">Одобри</button>
         </div>
@@ -103,7 +112,7 @@ async function meetups(panel) {
             <div class="meetup-when">${esc(formatWhen(m.startsAt, true))}</div>
             <div class="meetup-row"><span class="tag amber">${esc(m.nicheLabel)}</span><span class="tag">${esc(m.audienceLabel)}</span><span>${esc(m.venueName)}</span></div>
             <div>Идват: <span class="count">${m.people.length} от ${m.capacity}</span></div>
-            ${m.people.length ? `<ul class="small" style="margin:0;padding-left:20px">${m.people.map((p) => `<li>${esc(p.name)} · <a href="tel:${esc(p.phone)}">${esc(p.phone)}</a>${p.instagram ? ` · @${esc(p.instagram)}` : ''}</li>`).join('')}</ul>` : ''}
+            ${m.people.length ? `<ul class="small admin-people">${m.people.map((p) => `<li class="admin-person"><span class="avatar sm">${p.photo ? `<img src="/api/photo?u=${encodeURIComponent(p.id)}&v=${encodeURIComponent(p.photo)}" alt="" loading="lazy">` : ''}</span><span>${esc(p.name)} · <a href="tel:${esc(p.phone)}">${esc(p.phone)}</a>${p.instagram ? ` · @${esc(p.instagram)}` : ''}</span></li>`).join('')}</ul>` : ''}
             <div class="actions"><button class="btn danger small" type="button" data-del="${esc(m.id)}">Изтрий сбирката</button></div>
           </article>`).join('') : '<div class="card"><p>Няма предстоящи сбирки.</p></div>'}
       </div>

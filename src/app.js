@@ -16,6 +16,12 @@ const root = $('#app');
 const topActions = $('#top-actions');
 let me = null; // { email, isAdmin, profile }
 
+// Адрес на профилна снимка. m е сбирката, през която имаш право да я видиш.
+const photoUrl = (userId, version, meetupId = '') =>
+  `/api/photo?u=${encodeURIComponent(userId)}${meetupId ? `&m=${encodeURIComponent(meetupId)}` : ''}&v=${encodeURIComponent(version || '')}`;
+
+const setView = (name) => { document.body.dataset.view = name; };
+
 const render = (html) => {
   root.innerHTML = html;
   root.querySelector('h1, h2')?.setAttribute('tabindex', '-1');
@@ -36,6 +42,7 @@ function setTopActions(loggedIn) {
 
 function renderAuth(mode = location.hash === '#signup' ? 'signup' : 'login', notice = '') {
   setTopActions(false);
+  setView('auth');
   const isSignup = mode === 'signup';
   render(`
     <h1>${isSignup ? 'Регистрация' : 'Вход'}</h1>
@@ -154,11 +161,12 @@ function surveyPrefill() {
 
 function renderProfileForm(profile = {}, isEdit = false) {
   setTopActions(true);
+  setView('form');
   const year = new Date().getFullYear();
   const chosen = new Set(profile.interests || []);
   render(`
     <h1>${isEdit ? 'Редактирай профила' : 'Твоят профил'}</h1>
-    <p class="muted">Тези данни вижда само организаторът. Другите участници не виждат профила ти. На сбирката се запознавате на живо.</p>
+    <p class="muted">Телефонът и останалите данни вижда само организаторът. Хората от същата сбирка виждат само малкото ти име, годините и снимката ти, и то след като се запишат.</p>
     ${isEdit && profile.status === 'verified' ? '<p class="muted small">Ако смениш име, пол или година на раждане, ще трябва да минеш проверката отново.</p>' : ''}
     <form id="profile-form" novalidate>
       <div class="field">
@@ -235,12 +243,12 @@ function renderProfileForm(profile = {}, isEdit = false) {
 
 /* ---------- Проверка със селфи ---------- */
 
-// Смалява снимката до 1024 px и я прави JPEG, за да е лека
-function toJpeg(file) {
+// Смалява снимката (по подразбиране до 1024 px) и я прави JPEG, за да е лека
+function toJpeg(file, max = 1024) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
-      const scale = Math.min(1, 1024 / Math.max(img.width, img.height));
+      const scale = Math.min(1, max / Math.max(img.width, img.height));
       const canvas = document.createElement('canvas');
       canvas.width = Math.round(img.width * scale);
       canvas.height = Math.round(img.height * scale);
@@ -253,8 +261,77 @@ function toJpeg(file) {
   });
 }
 
+/* ---------- Профилна снимка ---------- */
+
+function renderPhoto(isEdit = false) {
+  setTopActions(true);
+  setView('form');
+  const p = me.profile;
+  const current = p.photoAt ? photoUrl(me.id, p.photoAt) : '';
+  render(`
+    <h1>${isEdit ? 'Смени снимката' : 'Твоята снимка'}</h1>
+    <p>Хората, записани за същата сбирка, виждат снимката ти, след като и те натиснат „Идвам“. Така всеки знае с кого ще се види.</p>
+    <ul class="rules small muted">
+      <li>Ясно се вижда лицето ти.</li>
+      <li>На снимката си само ти.</li>
+      <li>Без слънчеви очила и филтри, които променят лицето.</li>
+    </ul>
+    ${p.status === 'verified' ? `<p class="muted small">${isEdit ? 'Ако смениш снимката' : 'След като качиш снимката'}, ще трябва да минеш проверката със селфи отново, за да видим, че снимката е твоя.</p>` : ''}
+    <form id="photo-form" class="stack" novalidate>
+      <div class="photo-pick">
+        <div class="avatar xl" id="photo-preview">${current ? `<img src="${current}" alt="Твоята снимка">` : '<span aria-hidden="true">?</span>'}</div>
+        <div class="field">
+          <input type="file" id="photo" class="visually-hidden" accept="image/*">
+          <label for="photo" class="btn ${current ? 'ghost' : ''}" id="photo-label">${current ? 'Избери друга снимка' : 'Избери снимка'}</label>
+          <span class="muted small">От галерията или с камерата.</span>
+        </div>
+      </div>
+      <p class="error" id="photo-error" role="alert"></p>
+      <div class="actions">
+        <button class="btn" type="submit" id="save-photo" hidden>Запази снимката</button>
+        ${isEdit ? '<button class="btn ghost" type="button" id="cancel">Отказ</button>' : ''}
+      </div>
+    </form>
+  `);
+
+  let blob = null;
+  $('#cancel')?.addEventListener('click', () => route());
+  $('#photo').addEventListener('change', async (e) => {
+    const err = $('#photo-error');
+    err.textContent = '';
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      blob = await toJpeg(file, 800);
+      $('#photo-preview').innerHTML = `<img src="${URL.createObjectURL(blob)}" alt="Новата ти снимка">`;
+      $('#photo-label').classList.add('ghost');
+      $('#photo-label').textContent = 'Избери друга снимка';
+      $('#save-photo').hidden = false;
+    } catch (ex) {
+      err.textContent = ex.message;
+    }
+  });
+  $('#photo-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!blob) { $('#photo-error').textContent = 'Първо избери снимка.'; return; }
+    const btn = e.submitter;
+    btn.disabled = true;
+    btn.textContent = 'Качваме…';
+    try {
+      const res = await api('/api/photo', { method: 'PUT', headers: { 'Content-Type': 'image/jpeg' }, body: blob });
+      me.profile = res.profile;
+      route();
+    } catch (ex) {
+      $('#photo-error').textContent = ex.message;
+      btn.disabled = false;
+      btn.textContent = 'Запази снимката';
+    }
+  });
+}
+
 async function renderVerify() {
   setTopActions(true);
+  setView('form');
   const v = await api('/api/verify');
   render(`
     <h1>Проверка на профила</h1>
@@ -268,7 +345,7 @@ async function renderVerify() {
         <span class="muted small" id="selfie-hint">Натисни бутона, за да се отвори камерата.</span>
       </div>
       <img id="preview" class="preview" alt="Преглед на селфито" hidden>
-      <p class="muted small">Снимката я вижда само организаторът и се изтрива веднага след проверката. Не пазим снимки и не използваме лицево разпознаване.</p>
+      <p class="muted small">Селфито го вижда само организаторът, сравнява го с профилната ти снимка и го изтрива веднага след проверката. Не използваме лицево разпознаване.</p>
       <p class="error" id="verify-error" role="alert"></p>
       <div class="actions">
         <button class="btn" type="submit" id="send-selfie" hidden>Изпрати за проверка</button>
@@ -319,6 +396,7 @@ async function renderVerify() {
 
 function renderPending() {
   setTopActions(true);
+  setView('form');
   render(`
     <h1>Проверяваме профила ти</h1>
     <p><span class="status wait">Чака проверка</span></p>
@@ -332,6 +410,7 @@ function renderPending() {
 
 async function renderMeetups(message = '') {
   setTopActions(true);
+  setView('meetups');
   const p = me.profile;
   const { meetups } = await api('/api/meetups');
   const cards = meetups.map((m) => {
@@ -352,6 +431,14 @@ async function renderMeetups(message = '') {
         </div>
         ${m.venue ? `<div><strong>${esc(m.venue.name)}</strong>${m.venue.address ? `<br><span class="muted">${esc(m.venue.address)}</span>` : ''}</div>` : ''}
         <div class="actions"><span>Идват: <span class="count">${m.going} от ${m.capacity}</span></span>${action}</div>
+        ${m.people ? `
+          <div class="people">
+            ${m.people.map((x) => `
+              <figure class="person">
+                <div class="avatar">${x.photo ? `<img src="${photoUrl(x.id, x.photo, m.id)}" alt="${esc(x.firstName)}" loading="lazy">` : '<span aria-hidden="true">?</span>'}</div>
+                <figcaption>${x.me ? 'Ти' : esc(x.firstName)}<span class="muted">${esc(x.age)} г.</span></figcaption>
+              </figure>`).join('')}
+          </div>` : '<p class="muted small">Кой идва, виждаш след като натиснеш „Идвам“. Ако не ти харесва компанията, можеш да се отпишеш.</p>'}
       </article>`;
   }).join('');
 
@@ -363,9 +450,16 @@ async function renderMeetups(message = '') {
     <div class="list">${cards || '<div class="card"><p>Още няма обявени сбирки. Ще ти се обадим, щом има по твоя интерес.</p></div>'}</div>
     <h2 style="margin-top:48px">Профил</h2>
     <div class="card stack">
-      <p class="muted small">Интереси: ${esc((p.interests || []).map((k) => NICHES[k]).join(', '))}</p>
+      <div class="me-row">
+        <div class="avatar lg">${p.photoAt ? `<img src="${photoUrl(me.id, p.photoAt)}" alt="Твоята снимка">` : ''}</div>
+        <div>
+          <strong>${esc(p.name)}</strong>
+          <p class="muted small">Интереси: ${esc((p.interests || []).map((k) => NICHES[k]).join(', '))}</p>
+        </div>
+      </div>
       <div class="actions">
         <button class="btn ghost small" type="button" id="edit">Редактирай профила</button>
+        <button class="btn ghost small" type="button" id="edit-photo">Смени снимката</button>
         <button class="btn danger small" type="button" id="delete">Изтрий профила</button>
       </div>
       <p class="error" id="delete-msg" role="alert"></p>
@@ -384,6 +478,7 @@ async function renderMeetups(message = '') {
     }
   }));
   $('#edit').addEventListener('click', () => renderProfileForm(me.profile, true));
+  $('#edit-photo').addEventListener('click', () => renderPhoto(true));
   setupDelete();
 }
 
@@ -413,6 +508,7 @@ function setupDelete() {
 
 function renderNewPassword() {
   setTopActions(true);
+  setView('form');
   render(`
     <h1>Нова парола</h1>
     <form id="pw-form" novalidate>
@@ -448,6 +544,7 @@ async function route() {
   try {
     const p = me.profile;
     if (!p) return renderProfileForm(surveyPrefill());
+    if (!p.photoAt) return renderPhoto();
     if (p.status === 'verified') return await renderMeetups();
     if (p.status === 'pending') return renderPending();
     return await renderVerify();

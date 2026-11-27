@@ -39,7 +39,7 @@ export default async (req) => {
         .sort((a, b) => (a.submittedAt || '').localeCompare(b.submittedAt || ''))
         .map((p) => ({
           id: p.id, name: p.name, gender: p.gender, age: ageFrom(p.birthYear),
-          gesture: p.gesture, submittedAt: p.submittedAt,
+          gesture: p.gesture, submittedAt: p.submittedAt, photo: p.photoAt || null,
         }));
       return json({ pending });
     }
@@ -59,8 +59,9 @@ export default async (req) => {
           const { blobs } = await store.list({ prefix: `rsvps/${m.id}/` });
           const people = await Promise.all(
             blobs.map(async (b) => {
-              const p = await readJson(store, `profiles/${b.key.split('/').pop()}`);
-              return p ? { name: p.name, phone: p.phone, instagram: p.instagram } : null;
+              const id = b.key.split('/').pop();
+              const p = await readJson(store, `profiles/${id}`);
+              return p ? { id, name: p.name, phone: p.phone, instagram: p.instagram, photo: p.photoAt || null } : null;
             }),
           );
           return {

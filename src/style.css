@@ -164,3 +164,67 @@ footer p { margin: 0 0 6px; }
 
 .surveys { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .surveys li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 12px; font-size: 15px; color: var(--mist); }
+
+/* Профилни снимки */
+.avatar {
+  width: 56px; height: 56px; flex: none; border-radius: 50%; overflow: hidden;
+  background: var(--night); border: 2px solid var(--line);
+  display: grid; place-items: center; color: var(--mist); font-family: var(--display); font-weight: 800;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar.sm { width: 32px; height: 32px; border-width: 1px; }
+.avatar.lg { width: 72px; height: 72px; }
+.avatar.xl { width: 144px; height: 144px; font-size: 48px; border-color: var(--amber); }
+.photo-pick { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; }
+.rules { margin: 0 0 4px; padding-left: 20px; display: grid; gap: 4px; }
+.people { display: flex; flex-wrap: wrap; gap: 14px 16px; padding-top: 6px; border-top: 1px solid var(--line); }
+.person { margin: 10px 0 0; display: grid; justify-items: center; gap: 6px; width: 72px; text-align: center; font-size: 14px; font-weight: 700; line-height: 1.25; }
+.person figcaption { display: grid; overflow-wrap: anywhere; }
+.person figcaption .muted { font-weight: 600; font-size: 13px; }
+.list > .card + .card { margin-top: 0; }
+.me-row { display: flex; align-items: center; gap: 16px; }
+.me-row p { margin: 4px 0 0; }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.compare figure { margin: 0; display: grid; gap: 6px; align-content: start; }
+.preview.empty { display: grid; place-items: center; min-height: 160px; color: var(--mist); border: 1.5px dashed var(--line); }
+.admin-people { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.admin-person { display: flex; align-items: center; gap: 10px; }
+
+/* Страничният панел се вижда само на компютър */
+.side { display: none; }
+
+/* ---------- Компютър ---------- */
+@media (min-width: 960px) {
+  body { font-size: 17px; }
+  .wrap.top, footer .wrap, .wrap.wide { max-width: 1180px; padding-inline: 40px; }
+
+  .app-layout .shell {
+    max-width: 1180px; margin: 0 auto; padding: 40px 40px 72px;
+    display: grid; grid-template-columns: minmax(340px, 420px) minmax(0, 1fr); gap: 72px; align-items: start;
+  }
+  .app-layout .shell main.wrap { max-width: 600px; margin: 0; padding: 16px 0 0; }
+  .side {
+    display: block; position: sticky; top: 32px;
+    background: var(--amber); color: var(--night); border-radius: 28px; padding: 44px 40px 40px;
+  }
+  .side-bubble {
+    background: var(--night); color: var(--cream); border-radius: 24px 24px 24px 6px;
+    padding: 22px 24px; font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1.2;
+  }
+  .side-meta { font-weight: 700; font-size: 14px; margin: 10px 0 32px 4px; }
+  .side-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; font-weight: 700; }
+  .side-points li { display: flex; gap: 12px; align-items: center; }
+  .side-points li::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--night); flex: none; }
+
+  /* Сбирките имат нужда от място: без страничния панел, картите в две колони */
+  body[data-view="meetups"] .shell { display: block; }
+  body[data-view="meetups"] .side { display: none; }
+  body[data-view="meetups"] .shell main.wrap { max-width: none; }
+  body[data-view="meetups"] .list { grid-template-columns: 1fr 1fr; }
+  body[data-view="meetups"] .list > .card + .card { margin-top: 0; }
+  body[data-view="meetups"] #app > .card { max-width: 640px; }
+
+  /* Админ панел: проверките една до друга */
+  #admin .list { grid-template-columns: 1fr; }
+  .opt { min-height: 60px; }
+}

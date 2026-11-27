@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/src/style.css">
 </head>
-<body>
+<body class="app-layout">
 <header class="wrap top">
     <a class="brand" href="/" aria-label="Идваш ли? Начало">
       <svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#FFB547"/><text x="150" y="160" text-anchor="middle" font-family="Unbounded, sans-serif" font-weight="800" font-size="150" fill="#121826">?</text></svg>
@@ -21,9 +21,20 @@
     </a>
     <div class="top-actions" id="top-actions"></div>
 </header>
-<main class="wrap" id="app" aria-live="polite">
-  <p class="muted">Зареждаме…</p>
-</main>
+<div class="shell">
+  <aside class="side">
+    <div class="side-bubble">Идваш ли довечера на наргиле?</div>
+    <p class="side-meta">Сбирка в Студентски град, 20:00</p>
+    <ul class="side-points">
+      <li>Само проверени профили</li>
+      <li>Малки групи по интерес</li>
+      <li>Виждаш кой идва, преди да отидеш</li>
+    </ul>
+  </aside>
+  <main class="wrap" id="app" aria-live="polite">
+    <p class="muted">Зареждаме…</p>
+  </main>
+</div>
 <footer>
   <div class="wrap">
     <p>Идваш ли? Сбирки по интереси в София.</p>

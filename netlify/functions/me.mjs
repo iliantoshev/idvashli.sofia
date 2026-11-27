@@ -13,7 +13,7 @@ export default async (req) => {
   const profile = await readJson(store, key);
 
   if (req.method === 'GET') {
-    return json({ email: user.email, isAdmin: isAdmin(user), profile });
+    return json({ id: user.id, email: user.email, isAdmin: isAdmin(user), profile });
   }
 
   if (req.method === 'PUT') {
