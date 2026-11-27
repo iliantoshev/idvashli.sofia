@@ -591,7 +591,7 @@ async function renderProfile() {
         <dt>Телефон</dt><dd>${esc(p.phone)}</dd>
         <dt>Instagram</dt><dd>${p.instagram ? `@${esc(p.instagram)} <span class="muted small">(${p.showInstagram ? 'виждат го хората от сбирките ти' : 'вижда го само организаторът'})</span>` : dash}</dd>
         <dt>Квартал</dt><dd>${p.area ? esc(p.area) : dash}</dd>
-        <dt>Интереси</dt><dd><div class="meetup-row">${(p.interests || []).map((k) => `<span class="tag">${esc(NICHES[k])}</span>`).join('')}</div></dd>
+        <dt>Интереси</dt><dd><div class="meetup-row">${(p.interests || []).filter((k) => NICHES[k]).map((k) => `<span class="tag">${esc(NICHES[k])}</span>`).join('')}</div></dd>
       </dl>
       <p class="muted small" style="margin-top:16px">Имейла, телефона, фамилията и квартала ти вижда само организаторът. Хората от твоите сбирки виждат малкото ти име, годините, снимката и интересите${p.showInstagram ? ', и Instagram-а ти' : ''}, докато сбирката предстои.</p>
       <div class="actions">
