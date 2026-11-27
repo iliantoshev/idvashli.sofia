@@ -76,7 +76,11 @@ export default async (req) => {
     }
 
     if (view === 'survey') {
-      const responses = await listJson(store, 'survey/');
+      const { blobs } = await store.list({ prefix: 'survey/' });
+      const responses = (await Promise.all(blobs.map(async (b) => {
+        const r = await readJson(store, b.key);
+        return r ? { id: b.key.slice('survey/'.length), ...r } : null;
+      }))).filter(Boolean);
       responses.sort((a, b) => a.at.localeCompare(b.at));
       return json({ responses });
     }
@@ -137,6 +141,13 @@ export default async (req) => {
         };
         await store.setJSON(`meetups/${meetup.id}`, meetup);
         return json({ meetup });
+      }
+
+      case 'deleteSurvey': {
+        const id = String(body.id || '').replace(/[^a-z0-9-]/gi, '');
+        if (!id) return fail('Няма такава анкета.');
+        await store.delete(`survey/${id}`);
+        return json({ deleted: true });
       }
 
       case 'deleteMeetup': {

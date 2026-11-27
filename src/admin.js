@@ -248,7 +248,24 @@ async function survey(panel) {
             <h3 style="margin-top:24px">Само жените (${women.length})</h3>${rows(q, women)}
             <h3 style="margin-top:24px">Само мъжете (${men.length})</h3>${rows(q, men)}` : ''}
         </article>`).join('')}
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h2>Отделни анкети</h2>
+      <p class="muted small">Изтрий тестовите и тези, които не трябва да се броят (например от близки, които знаят проекта).</p>
+      <ul class="surveys">
+        ${responses.map((r) => `<li><span>${esc(formatWhen(r.at))} · ${esc(r.src || 'без източник')}</span><button class="btn ghost small" type="button" data-sdel="${esc(r.id)}">Изтрий</button></li>`).join('')}
+      </ul>
     </div>`;
+
+  $$('[data-sdel]').forEach((b) => {
+    let armed = false;
+    b.addEventListener('click', async () => {
+      if (!armed) { armed = true; b.textContent = 'Натисни пак'; return; }
+      b.disabled = true;
+      await postJson('/api/admin', { action: 'deleteSurvey', id: b.dataset.sdel }).catch((ex) => { $('#admin-error').textContent = ex.message; });
+      shell();
+    });
+  });
 }
 
 /* ---------- Достъп ---------- */
