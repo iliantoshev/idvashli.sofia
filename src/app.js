@@ -27,15 +27,28 @@ const render = (html) => {
   root.querySelector('h1, h2')?.setAttribute('tabindex', '-1');
 };
 
+// Малката снимка (или първата буква от името)
+function avatarInner(p) {
+  if (p?.photoAt) return `<img src="${photoUrl(me.id, p.photoAt)}" alt="">`;
+  return `<span>${esc((p?.name || '?').trim().charAt(0).toUpperCase())}</span>`;
+}
+
+async function doLogout() {
+  await logout().catch(() => {});
+  location.href = '/app.html';
+}
+
+// Горе вдясно: снимката ти води към профила. Без профил има само "Изход".
 function setTopActions(loggedIn) {
+  const p = me?.profile;
+  const onProfile = location.hash === '#profil';
   topActions.innerHTML = loggedIn
     ? `${me?.isAdmin ? '<a class="btn ghost small" href="/admin.html">Организатор</a>' : ''}
-       <button class="btn ghost small" type="button" id="logout">Изход</button>`
+       ${p
+    ? `<a class="avatar-btn${onProfile ? ' current' : ''}" href="#profil" aria-label="Моят профил" title="Моят профил"${onProfile ? ' aria-current="page"' : ''}><span class="avatar">${avatarInner(p)}</span></a>`
+    : '<button class="btn ghost small" type="button" id="logout">Изход</button>'}`
     : '';
-  $('#logout')?.addEventListener('click', async () => {
-    await logout().catch(() => {});
-    location.href = '/app.html';
-  });
+  $('#logout')?.addEventListener('click', doLogout);
 }
 
 /* ---------- Вход и регистрация ---------- */
@@ -444,26 +457,9 @@ async function renderMeetups(message = '') {
 
   render(`
     <h1>Сбирки</h1>
-    <p><span class="status ok">Проверен профил</span> · ${esc(p.name)}</p>
     ${message ? `<p class="success">${esc(message)}</p>` : ''}
     <p class="error" id="rsvp-error" role="alert"></p>
     <div class="list">${cards || '<div class="card"><p>Още няма обявени сбирки. Ще ти се обадим, щом има по твоя интерес.</p></div>'}</div>
-    <h2 style="margin-top:48px">Профил</h2>
-    <div class="card stack">
-      <div class="me-row">
-        <div class="avatar lg">${p.photoAt ? `<img src="${photoUrl(me.id, p.photoAt)}" alt="Твоята снимка">` : ''}</div>
-        <div>
-          <strong>${esc(p.name)}</strong>
-          <p class="muted small">Интереси: ${esc((p.interests || []).map((k) => NICHES[k]).join(', '))}</p>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn ghost small" type="button" id="edit">Редактирай профила</button>
-        <button class="btn ghost small" type="button" id="edit-photo">Смени снимката</button>
-        <button class="btn danger small" type="button" id="delete">Изтрий профила</button>
-      </div>
-      <p class="error" id="delete-msg" role="alert"></p>
-    </div>
   `);
 
   $$('[data-rsvp]').forEach((b) => b.addEventListener('click', async () => {
@@ -477,8 +473,74 @@ async function renderMeetups(message = '') {
       b.disabled = false;
     }
   }));
+}
+
+/* ---------- Моят профил (от снимката горе вдясно) ---------- */
+
+async function renderProfile() {
+  setTopActions(true);
+  setView('profile');
+  const p = me.profile;
+  const verified = p.status === 'verified';
+  const status = verified
+    ? '<span class="status ok">Проверен профил</span>'
+    : p.status === 'pending'
+      ? '<span class="status wait">Чака проверка</span>'
+      : '<span class="status">Не е проверен</span>';
+
+  let mine = [];
+  if (verified) {
+    try { mine = (await api('/api/meetups')).meetups.filter((m) => m.mine); } catch { /* профилът се показва и без сбирките */ }
+  }
+  const dash = '<span class="muted">не е попълнено</span>';
+
+  render(`
+    <p><a href="#" class="back-link">← ${verified ? 'Към сбирките' : 'Назад'}</a></p>
+    <div class="profile-head">
+      <div class="avatar xl">${avatarInner(p)}</div>
+      <div>
+        <h1>${esc(p.name)}</h1>
+        <p>${status}</p>
+        <p class="muted">${p.gender === 'f' ? 'Жена' : 'Мъж'}, ${esc(new Date().getFullYear() - p.birthYear)} г.</p>
+      </div>
+    </div>
+    ${['none', 'rejected'].includes(p.status) ? '<div class="card stack"><p>За да се записваш за сбирки, мини проверката със селфи.</p><div><a class="btn" href="#">Към проверката</a></div></div>' : ''}
+
+    <div class="card">
+      <dl class="facts">
+        <dt>Имейл</dt><dd>${esc(me.email)}</dd>
+        <dt>Телефон</dt><dd>${esc(p.phone)}</dd>
+        <dt>Instagram</dt><dd>${p.instagram ? `@${esc(p.instagram)}` : dash}</dd>
+        <dt>Квартал</dt><dd>${p.area ? esc(p.area) : dash}</dd>
+        <dt>Интереси</dt><dd><div class="meetup-row">${(p.interests || []).map((k) => `<span class="tag">${esc(NICHES[k])}</span>`).join('')}</div></dd>
+      </dl>
+      <p class="muted small" style="margin-top:16px">Имейла, телефона и фамилията ти вижда само организаторът. Хората от твоите сбирки виждат малкото ти име, годините и снимката.</p>
+      <div class="actions">
+        <button class="btn ghost small" type="button" id="edit">Редактирай профила</button>
+        <button class="btn ghost small" type="button" id="edit-photo">Смени снимката</button>
+      </div>
+    </div>
+
+    ${verified ? `
+      <h2 class="section-title">Моите сбирки</h2>
+      ${mine.length
+    ? `<div class="list">${mine.map((m) => `
+          <a class="card mini-meetup" href="#">
+            <strong>${esc(formatWhen(m.startsAt, true))}</strong>
+            <span class="muted">${esc(m.niche)}${m.venue ? ` · ${esc(m.venue.name)}` : ''} · идват ${m.going} от ${m.capacity}</span>
+          </a>`).join('')}</div>`
+    : '<p class="muted">Още не си записан за сбирка.</p>'}` : ''}
+
+    <div class="actions profile-end">
+      <button class="btn ghost small" type="button" id="logout-2">Изход</button>
+      <button class="btn danger small" type="button" id="delete">Изтрий профила</button>
+    </div>
+    <p class="error" id="delete-msg" role="alert"></p>
+  `);
+
   $('#edit').addEventListener('click', () => renderProfileForm(me.profile, true));
   $('#edit-photo').addEventListener('click', () => renderPhoto(true));
+  $('#logout-2').addEventListener('click', doLogout);
   setupDelete();
 }
 
@@ -545,6 +607,7 @@ async function route() {
     const p = me.profile;
     if (!p) return renderProfileForm(surveyPrefill());
     if (!p.photoAt) return renderPhoto();
+    if (location.hash === '#profil') return await renderProfile();
     if (p.status === 'verified') return await renderMeetups();
     if (p.status === 'pending') return renderPending();
     return await renderVerify();
@@ -558,6 +621,11 @@ function showError(ex) {
   render(`<h1>Нещо се обърка</h1><p class="error">${esc(ex.message)}</p><button class="btn" type="button" id="retry">Опитай пак</button>`);
   $('#retry').addEventListener('click', () => location.reload());
 }
+
+// Клик на снимката горе вдясно или "← Назад" сменя адреса (#profil или #)
+window.addEventListener('hashchange', () => {
+  if (me) { window.scrollTo(0, 0); route(); }
+});
 
 async function start() {
   try {

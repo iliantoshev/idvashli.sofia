@@ -190,6 +190,30 @@ footer p { margin: 0 0 6px; }
 .admin-people { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .admin-person { display: flex; align-items: center; gap: 10px; }
 
+/* Снимката горе вдясно */
+.avatar-btn { display: inline-flex; border-radius: 50%; text-decoration: none; }
+.avatar-btn .avatar { width: 44px; height: 44px; border-color: var(--line); font-size: 18px; color: var(--cream); }
+.avatar-btn:hover .avatar, .avatar-btn.current .avatar { border-color: var(--amber); }
+.avatar span { line-height: 1; }
+
+/* Моят профил */
+.back-link { color: var(--mist); text-decoration: none; font-weight: 600; font-size: 15px; }
+.back-link:hover { color: var(--cream); }
+.profile-head { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; margin: 8px 0 28px; }
+.profile-head h1 { margin-bottom: 8px; }
+.profile-head p { margin: 0 0 4px; }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 12px 24px; margin: 0 0 4px; }
+.facts dt { color: var(--mist); font-size: 15px; }
+.facts dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.section-title { margin-top: 40px; }
+.mini-meetup { display: grid; gap: 4px; text-decoration: none; color: var(--cream); }
+.mini-meetup:hover { border-color: var(--amber); color: var(--cream); }
+.profile-end { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); }
+.card + .actions, .card .actions { margin-top: 4px; }
+body[data-view="profile"] #app > .card + .card { margin-top: 14px; }
+body[data-view="profile"] #app > .card { margin-bottom: 0; }
+@media (max-width: 420px) { .facts { grid-template-columns: 1fr; gap: 2px; } .facts dd { margin-bottom: 10px; } }
+
 /* Страничният панел се вижда само на компютър */
 .side { display: none; }
 
@@ -222,7 +246,9 @@ footer p { margin: 0 0 6px; }
   body[data-view="meetups"] .shell main.wrap { max-width: none; }
   body[data-view="meetups"] .list { grid-template-columns: 1fr 1fr; }
   body[data-view="meetups"] .list > .card + .card { margin-top: 0; }
-  body[data-view="meetups"] #app > .card { max-width: 640px; }
+  body[data-view="profile"] .shell { display: block; }
+  body[data-view="profile"] .side { display: none; }
+  body[data-view="profile"] .shell main.wrap { max-width: 720px; }
 
   /* Админ панел: проверките една до друга */
   #admin .list { grid-template-columns: 1fr; }
