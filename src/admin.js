@@ -19,6 +19,7 @@ async function shell() {
       <button type="button" role="tab" data-tab="meetups" aria-selected="${tab === 'meetups'}">Сбирки</button>
       <button type="button" role="tab" data-tab="venues" aria-selected="${tab === 'venues'}">Заведения</button>
       <button type="button" role="tab" data-tab="survey" aria-selected="${tab === 'survey'}">Анкета</button>
+      <button type="button" role="tab" data-tab="backups" aria-selected="${tab === 'backups'}">Копия</button>
     </div>
     <p class="error" id="admin-error" role="alert"></p>
     <div id="panel"><p class="muted">Зареждаме…</p></div>`;
@@ -29,9 +30,55 @@ async function shell() {
     if (tab === 'meetups') await meetups(panel);
     if (tab === 'venues') await venues(panel);
     if (tab === 'survey') await survey(panel);
+    if (tab === 'backups') await backupsTab(panel);
   } catch (ex) {
     $('#admin-error').textContent = ex.message;
   }
+}
+
+/* ---------- Автоматично опресняване ---------- */
+// Всеки 10 секунди, докато страницата се вижда. Обновява се само ако има промяна,
+// за да не се губи написаното и да не мига екранът.
+const REFRESH_MS = 10000;
+let lastSig = '';
+setInterval(async () => {
+  if (document.hidden) return;
+  if (tab !== 'pending' && tab !== 'meetups') return;
+  if (document.activeElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+  try {
+    const view = tab;
+    const r = await api(`/api/admin?view=${view}`);
+    const sig = view + JSON.stringify(r);
+    if (sig === lastSig) return;
+    const first = lastSig === '' || !lastSig.startsWith(view);
+    lastSig = sig;
+    if (first) return; // първото четене само запомня състоянието
+    const panel = $('#panel');
+    if (view === 'pending') await pending(panel);
+    else await meetups(panel);
+  } catch { /* следващият опит е след 10 секунди */ }
+}, REFRESH_MS);
+
+/* ---------- Копия ---------- */
+
+async function backupsTab(panel) {
+  const { backups } = await api('/api/admin?view=backups');
+  panel.innerHTML = `
+    <div class="card stack">
+      <p>Автоматично копие на профилите, сбирките, записванията и анкетата се прави на всеки 48 часа. Пазят се последните 7 копия (около 2 седмици). Снимките не влизат в копията.</p>
+      <div><button class="btn small" type="button" id="backup-now">Направи копие сега</button></div>
+      <p class="error" id="backup-error" role="alert"></p>
+    </div>
+    <div class="list" style="margin-top:12px">${backups.length ? backups.map((b) => `
+      <article class="card actions">
+        <span>${esc(formatWhen(b.at))}</span>
+        <a class="btn ghost small" href="/api/admin?backup=${encodeURIComponent(b.key)}" download>Свали</a>
+      </article>`).join('') : '<div class="card"><p class="muted">Още няма копия.</p></div>'}</div>`;
+  $('#backup-now').addEventListener('click', async (e) => {
+    e.target.disabled = true;
+    try { await postJson('/api/admin', { action: 'createBackup' }); await backupsTab(panel); }
+    catch (ex) { $('#backup-error').textContent = ex.message; e.target.disabled = false; }
+  });
 }
 
 /* ---------- Проверки ---------- */

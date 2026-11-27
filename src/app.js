@@ -460,11 +460,15 @@ function renderPending() {
 
 /* ---------- Сбирки ---------- */
 
-async function renderMeetups(message = '') {
+let meetupsSig = '';
+async function renderMeetups(message = '', silent = false) {
   setTopActions(true);
   setView('meetups');
   const p = me.profile;
   const { meetups } = await api('/api/meetups');
+  const sig = JSON.stringify(meetups);
+  if (silent && sig === meetupsSig) return;
+  meetupsSig = sig;
   const cards = meetups.map((m) => {
     const full = m.going >= m.capacity && !m.mine;
     const wrongGroup = m.audience !== 'all' && m.audience !== p.gender;
@@ -703,6 +707,22 @@ function showError(ex) {
 window.addEventListener('hashchange', () => {
   if (me) { window.scrollTo(0, 0); route(); }
 });
+
+// Автоматично опресняване на всеки 10 секунди, докато страницата се вижда.
+// Сбирките се пречертават само при промяна; чакащият проверка получава решението веднага.
+setInterval(async () => {
+  if (document.hidden || !me?.profile) return;
+  if (document.activeElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+  try {
+    const p = me.profile;
+    if (p.status === 'verified' && p.photoAt && !location.hash && document.body.dataset.view === 'meetups') {
+      if (!document.querySelector('[data-rsvp][disabled]')) await renderMeetups('', true);
+    } else if (p.status === 'pending' && !location.hash) {
+      const fresh = await api('/api/me');
+      if (fresh.profile?.status !== 'pending') { me = fresh; await route(); }
+    }
+  } catch { /* следващият опит е след 10 секунди */ }
+}, 10000);
 
 async function start() {
   try {

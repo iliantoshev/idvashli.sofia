@@ -1,8 +1,9 @@
 // /api/admin: само за организатора (роля "admin" в Netlify Identity)
 import {
-  data, selfies, json, fail, currentUser, isAdmin, readJson, listJson, countKeys, isUpcoming,
+  data, selfies, backups, json, fail, currentUser, isAdmin, readJson, listJson, countKeys, isUpcoming,
   randomId, ageFrom, NICHES, isNiche, AUDIENCES,
 } from '../../lib/shared.mjs';
+import { makeBackup, listBackups } from '../../lib/backup.mjs';
 
 const REASONS = {
   face: 'Лицето не се вижда ясно.',
@@ -27,7 +28,20 @@ export default async (req) => {
       return new Response(img, { headers: { 'Content-Type': 'image/jpeg', 'Cache-Control': 'no-store' } });
     }
 
+    const backupKey = url.searchParams.get('backup');
+    if (backupKey) {
+      if (!/^backup-[0-9TZ-]+\.json$/.test(backupKey)) return fail('Невалидно копие.');
+      const b = await backups().get(backupKey, { type: 'text' });
+      if (!b) return fail('Няма такова копие.', 404);
+      return new Response(b, { headers: {
+        'Content-Type': 'application/json', 'Cache-Control': 'no-store',
+        'Content-Disposition': `attachment; filename="idvashli-${backupKey}"`,
+      } });
+    }
+
     const view = url.searchParams.get('view');
+
+    if (view === 'backups') return json({ backups: await listBackups() });
 
     if (view === 'pending') {
       const { blobs } = await store.list({ prefix: 'profiles/' });
@@ -143,6 +157,9 @@ export default async (req) => {
         await store.setJSON(`meetups/${meetup.id}`, meetup);
         return json({ meetup });
       }
+
+      case 'createBackup':
+        return json(await makeBackup());
 
       case 'deleteSurvey': {
         const id = String(body.id || '').replace(/[^a-z0-9-]/gi, '');
