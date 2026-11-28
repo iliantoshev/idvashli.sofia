@@ -1,11 +1,16 @@
 <!doctype html>
-<html lang="bg">
+<html lang="bg" data-type="software" data-radius="round" data-buttons="arrow" data-motion>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Идваш ли? | Сбирки по интереси в София</title>
-<meta name="description" content="Запиши се и ще ти пишем, когато има сбирка по твоя интерес близо до теб в София. Бизнес и пари, спорт, гейминг, коли, наргиле.">
-<meta name="theme-color" content="#FFB547">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Идваш ли?: сбирки по интереси за студенти в София</title>
+<meta name="description" content="Избираш интерес, натискаш „Идвам“ и отиваш на сбирка в Студентски град с проверени хора над 18 години.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Идваш ли? | Сбирки по интереси в София">
+<meta property="og:description" content="Сбирки по интереси в Студентски град с проверени хора.">
+<meta property="og:image" content="https://idvashli.netlify.app/og-image.png">
+<meta property="og:locale" content="bg_BG">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -13,321 +18,400 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Идваш ли?">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Идваш ли? | Сбирки по интереси в София">
-<meta property="og:description" content="Бизнес и пари, спорт, гейминг, коли, наргиле. Запиши се и ще ти пишем, когато има сбирка наблизо.">
-<meta property="og:image" content="https://idvashli.netlify.app/og-image.png">
-<meta property="og:locale" content="bg_BG">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#121826">
+<link rel="canonical" href="https://idvashli.netlify.app/">
+<meta name="site-kind" content="software">
+<meta name="page-type" content="software">
+<link rel="preload" href="/kit/fonts/ibm-plex-sans-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-  :root {
-    --night: #121826;
-    --night-2: #1B2335;
-    --line: #2C3650;
-    --amber: #FFB547;
-    --amber-deep: #E89A24;
-    --cream: #F3EDE2;
-    --mist: #A7B0C2;
-    --error: #FF8A7A;
-    --display: 'Unbounded', system-ui, sans-serif;
-    --body: 'Manrope', system-ui, sans-serif;
-  }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--night);
-    color: var(--cream);
-    font-family: var(--body);
-    font-size: 17px;
-    line-height: 1.55;
-  }
-  a { color: var(--amber); }
-  a:hover { color: var(--cream); }
-  :focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; border-radius: 6px; }
+/* IBM Plex Sans, self-hosted (Cyrillic and Latin; no Google Fonts request) */
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-display: swap; font-weight: 100 700; font-stretch: 100%;
+  src: url(/kit/fonts/ibm-plex-sans-cyrillic-wght-normal.woff2) format("woff2-variations");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-display: swap; font-weight: 100 700; font-stretch: 100%;
+  src: url(/kit/fonts/ibm-plex-sans-latin-wght-normal.woff2) format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+</style>
+<link rel="stylesheet" href="/kit/system.css">
+<link rel="stylesheet" href="/kit/ui/cards.css">
+<link rel="stylesheet" href="/kit/motion/motion.css">
+<link rel="stylesheet" href="/kit/backgrounds/backgrounds.css">
+<link rel="stylesheet" href="/kit/layout/layout.css">
+<link rel="stylesheet" href="/kit/icons/icon.css">
+<style>
+:root {
+  --p-bg: #121826; --p-surface: #1b2335; --p-ink: #f3ede2; --p-muted: #a7b0c2;
+  --p-accent: #ffb547; --p-accent-ink: #121826; --p-action: #ffb547; --p-action-ink: #121826;
+  --p-inv-bg: #f3ede2; --p-inv-surface: #e1dcd3; --p-inv-ink: #121826; --p-inv-muted: #5d6068;
+  --p-inv-accent: #121826; --p-inv-accent-ink: #f3ede2; --p-inv-action: #121826; --p-inv-action-ink: #f3ede2;
+  --font-display: "IBM Plex Sans", system-ui, sans-serif;
+  --font-text: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500;
+  --display-tracking: -0.025em;
+  --display-tracking-xl: -0.035em;
+  --ly-scale: 0.98;
+}
+</style>
+<link rel="stylesheet" href="/kit/ui/base.css">
+<script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
+<script src="/kit/backgrounds/backgrounds.js"></script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="/kit/moments/moments.js">
+<link rel="modulepreload" href="/kit/moments/lib.js">
+<link rel="modulepreload" href="/kit/moments/word-highlight/moment.js">
+<!-- page CSS: only inside the visuals (the app's own pieces, drawn as in app.html) -->
+<style>
+  .nav__logo svg { width: 34px; height: 30px; flex: none; }
+  .nav__logo { gap: 10px; }
+  /* the app's pieces: the same cards, chips and avatars as idvashli.netlify.app/app.html */
+  .iv { font: 400 15px/1.45 var(--font-text); color: var(--p-ink); }
+  .iv-card { background: #1b2335; border: 1px solid #2c3650; border-radius: 16px; padding: 18px; display: grid; gap: 12px; }
+  .iv-when { font: 500 17px/1.2 var(--font-display); letter-spacing: -0.01em; }
+  .iv-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .iv-tag { font: 500 13px/1 var(--font-text); padding: 6px 10px; border-radius: 999px; border: 1px solid #2c3650; color: #f3ede2; background: #121826; white-space: nowrap; }
+  .iv-tag--on { background: #ffb547; border-color: #ffb547; color: #121826; }
+  .iv-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .iv-muted { color: #a7b0c2; }
+  .iv-btn { font: 500 14px/1 var(--font-text); background: #ffb547; color: #121826; border-radius: 999px; padding: 10px 16px; white-space: nowrap; }
+  .iv-btn--ghost { background: transparent; color: #f3ede2; border: 1px solid #2c3650; }
+  .iv-people { display: flex; gap: 14px; flex-wrap: wrap; }
+  .iv-person { display: grid; justify-items: center; gap: 4px; font-size: 13px; }
+  .iv-av { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 500 17px/1 var(--font-display); color: #121826; border: 2px solid #121826; box-shadow: 0 0 0 1px #2c3650; }
+  .iv-av--lg { width: 64px; height: 64px; font-size: 24px; }
+  .iv-av.a1 { background: #ffb547; } .iv-av.a2 { background: #7ce0a3; } .iv-av.a3 { background: #8fb8ff; } .iv-av.a4 { background: #ff8a7a; } .iv-av.a5 { background: #f3ede2; }
+  .iv-ok { color: #7ce0a3; font-weight: 500; }
+  .iv-wait { color: #ffb547; font-weight: 500; }
+  .iv-push { background: rgb(243 237 226 / .96); color: #121826; border-radius: 18px; padding: 12px 14px; display: grid; grid-template-columns: 36px 1fr; gap: 10px; align-items: start; }
+  .iv-push__icon { width: 36px; height: 36px; border-radius: 9px; background: #121826; display: grid; place-items: center; }
+  .iv-push__icon svg { width: 24px; height: 21px; }
+  .iv-push b { font-weight: 500; display: block; }
+  .iv-push small { color: #5d6068; font-size: 13px; }
+  .iv-bubble { border-radius: 18px; padding: 10px 14px; font-size: 15px; max-width: 86%; }
+  .iv-bubble--in { background: #1b2335; border: 1px solid #2c3650; justify-self: start; border-bottom-left-radius: 6px; }
+  .iv-bubble--out { background: #ffb547; color: #121826; justify-self: end; border-bottom-right-radius: 6px; font-weight: 500; }
+  .iv-field { border: 1px solid #2c3650; border-radius: 10px; padding: 10px 12px; background: #121826; }
+  .iv-field small { display: block; color: #a7b0c2; font-size: 13px; }
+  .iv-selfie { aspect-ratio: 4 / 3; border-radius: 12px; background: linear-gradient(160deg, #2c3650, #1b2335); display: grid; place-items: center; font-size: 46px; }
 
-  .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+  /* the hero collage: the app's pieces on the page's own surface */
+  .ly-collage .ly-piece.iv-piece { background: transparent; overflow: visible; box-shadow: none; }
+  .ly-collage .ly-piece.iv-piece > .iv-card, .ly-collage .ly-piece.iv-piece > .iv-push { box-shadow: 0 22px 48px -22px rgb(0 0 0 / .6); }
+  .iv-chat { display: grid; gap: 10px; }
+  .ly-collage .iv { font-size: 17px; }
+  .ly-collage .iv-card { padding: 24px; gap: 16px; border-radius: 20px; }
+  .ly-collage .iv-when { font-size: 22px; }
+  .ly-collage .iv-tag { font-size: 15px; padding: 8px 12px; }
+  .ly-collage .iv-av { width: 56px; height: 56px; font-size: 21px; }
+  .ly-collage .iv-btn { font-size: 16px; padding: 12px 20px; }
+  .ly-collage .iv-bubble { font-size: 17px; padding: 12px 16px; }
+  .ly-collage .iv-push { padding: 16px 18px; grid-template-columns: 44px 1fr; }
+  .ly-collage .iv-push__icon { width: 44px; height: 44px; }
+  .ly-collage .iv-push small { font-size: 15px; }
+  @media (max-width: 639px) { .ly-collage .iv-chat { display: none; } .ly-collage .iv-people { display: none; } }
+  @media (max-width: 1023px) { .ly-collage .iv { font-size: 14px; } .ly-collage .iv-card { padding: 14px; gap: 10px; } .ly-collage .iv-when { font-size: 17px; } .ly-collage .iv-tag { font-size: 12px; padding: 5px 8px; } .ly-collage .iv-av { width: 38px; height: 38px; font-size: 15px; } .ly-collage .iv-btn { font-size: 13px; padding: 8px 12px; } .ly-collage .iv-bubble { font-size: 14px; } .ly-collage .iv-push small { font-size: 13px; } }
 
-  /* Amber block: header + hero */
-  .sun { background: var(--amber); color: var(--night); }
-  .sun a { color: var(--night); }
-  .sun :focus-visible { outline-color: var(--night); }
-
-  /* Header */
-  .top { padding-block: 20px; }
-  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--night); }
-  .brand svg { width: 34px; height: 30px; }
-  .brand span { font-family: var(--display); font-weight: 800; font-size: 17px; letter-spacing: -0.2px; }
-
-  /* Hero: a chat thread is the signature moment */
-  .hero { padding-block: 36px 56px; }
-  .thread { display: flex; flex-direction: column; gap: 14px; margin-bottom: 44px; }
-  .bubble {
-    max-width: 88%;
-    padding: 18px 22px;
-    font-family: var(--display);
-    font-weight: 700;
-    line-height: 1.2;
+  /* app-frame (sections-library.md, app-frame) */
+  .app.ui { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); margin-top: var(--s-7); background: #121826; border: 1px solid #2c3650; border-radius: 20px; overflow: hidden; }
+  .app > .app__pane { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
+  .app > .app__pane + .app__pane { border-left: 1px solid #2c3650; }
+  .app > .app__pane::after { content: ""; position: absolute; inset: auto 0 0 0; height: 64px; background: linear-gradient(transparent, #121826); pointer-events: none; }
+  .iv-bar { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid #2c3650; font: 500 15px/1 var(--font-text); }
+  .iv-list { display: grid; }
+  .iv-li { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 14px 18px; border-bottom: 1px solid #222b3f; }
+  .iv-li b { font-weight: 500; }
+  .iv-li span { color: #a7b0c2; font-size: 14px; }
+  .iv-li .iv-chip { grid-row: 1 / span 2; grid-column: 2; align-self: center; font: 500 13px/1 var(--font-text); padding: 6px 10px; border-radius: 999px; border: 1px solid #2c3650; color: #a7b0c2; }
+  .iv-li .iv-chip--mine { background: #ffb547; border-color: #ffb547; color: #121826; }
+  .iv-li .iv-chip--full { color: #ff8a7a; border-color: rgb(255 138 122 / .4); }
+  .iv-li.is-open { background: #1b2335; box-shadow: inset 3px 0 0 #ffb547; }
+  .iv-open { padding: 24px 28px; display: grid; gap: 18px; align-content: start; }
+  .iv-open h3 { font: 500 26px/1.15 var(--font-display); letter-spacing: -0.02em; margin: 0; }
+  @media (min-width: 1024px) and (max-width: 1279px) { .app.ui { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); } }
+  @media (max-width: 1023px) {
+    .app.ui { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+    .app > .app__pane--list { max-height: 252px; }
+    .app > .app__pane--list::after { display: none; }
+    .app > .app__pane + .app__pane { border-left: 0; border-top: 1px solid #2c3650; }
   }
-  .bubble.in {
-    align-self: flex-start;
-    background: var(--night);
-    color: var(--cream);
-    border-radius: 28px 28px 28px 6px;
-    font-size: clamp(26px, 7vw, 40px);
-  }
-  .bubble.out {
-    align-self: flex-end;
-    background: var(--cream);
-    color: var(--night);
-    border-radius: 28px 28px 6px 28px;
-    font-size: clamp(22px, 5.5vw, 30px);
-  }
-  .meta { font-family: var(--body); font-weight: 600; font-size: 13px; color: #4A3A1E; }
-  .meta.in { align-self: flex-start; margin: -6px 0 0 8px; }
-  .meta.out { align-self: flex-end; margin: -6px 8px 0 0; }
-
-  h1 {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: clamp(30px, 7.4vw, 46px);
-    line-height: 1.1;
-    letter-spacing: -0.5px;
-    margin: 0 0 18px;
-  }
-  .lead { color: #2A2620; font-size: 18px; margin: 0 0 28px; max-width: 34em; }
-
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-height: 54px; padding: 0 28px;
-    background: var(--amber); color: var(--night);
-    border: 0; border-radius: 999px;
-    font-family: var(--display); font-weight: 700; font-size: 17px;
-    text-decoration: none; cursor: pointer;
-  }
-  .btn:hover { background: var(--cream); color: var(--night); }
-  .sun .btn { background: var(--night); color: var(--cream); }
-  .sun .btn:hover { background: var(--cream); color: var(--night); }
-
-  /* Sections */
-  section { padding: 56px 0; }
-  section + section { border-top: 1px solid var(--line); }
-  h2 {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: clamp(24px, 5.6vw, 32px);
-    line-height: 1.15;
-    margin: 0 0 28px;
-  }
-
-  .chat { display: flex; flex-direction: column; gap: 12px; }
-  .msg { max-width: 86%; padding: 14px 18px; font-size: 17px; line-height: 1.4; }
-  .msg.out { align-self: flex-end; background: var(--cream); color: var(--night); border-radius: 22px 22px 6px 22px; font-family: var(--display); font-weight: 700; }
-  .msg.in { align-self: flex-start; background: var(--night-2); color: var(--cream); border: 1.5px solid var(--line); border-radius: 22px 22px 22px 6px; }
-  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .interests h3 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
-  .interests p { margin: 0; color: var(--mist); }
-
-  .interests { display: grid; gap: 0; }
-  .interest { padding: 22px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr; gap: 4px; }
-  .interest:first-child { padding-top: 0; }
-  .interest h3 { font-family: var(--display); font-weight: 700; font-size: 22px; color: var(--amber); }
-
-
-  /* Form */
-  form { display: grid; gap: 22px; }
-  .field { display: grid; gap: 8px; }
-  label, legend { font-weight: 700; font-size: 16px; }
-  .hint { font-weight: 400; color: var(--mist); font-size: 14px; }
-  input[type="text"], input[type="tel"] {
-    width: 100%;
-    min-height: 52px;
-    padding: 12px 16px;
-    background: var(--night-2);
-    border: 1.5px solid var(--line);
-    border-radius: 14px;
-    color: var(--cream);
-    font: inherit;
-  }
-  input[type="text"]:focus, input[type="tel"]:focus { border-color: var(--amber); outline: none; }
-  fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; }
-  legend { padding: 0; margin-bottom: 4px; }
-  .choices { display: flex; flex-wrap: wrap; gap: 10px; }
-  .choice { position: relative; }
-  .choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  .choice span {
-    display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
-    border: 1.5px solid var(--line); border-radius: 999px;
-    background: var(--night-2); color: var(--cream);
-    font-weight: 600; cursor: pointer; user-select: none;
-  }
-  .choice input:checked + span { background: var(--amber); border-color: var(--amber); color: var(--night); }
-  .choice input:focus-visible + span { outline: 3px solid var(--amber); outline-offset: 3px; }
-  .check { display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; font-weight: 400; font-size: 15px; color: var(--mist); }
-  .check input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--amber); }
-  .error { color: var(--error); font-size: 15px; font-weight: 600; min-height: 0; }
-  .hidden { display: none; }
-  .games {
-    margin-top: 6px;
-    padding: 18px;
-    border: 1.5px solid var(--line);
-    border-radius: 18px;
-    background: var(--night-2);
-    display: grid;
-    gap: 14px;
-  }
-  .games[hidden] { display: none; }
-  .games fieldset { gap: 14px; }
-  .games .choice span { background: var(--night); }
-  .dates .choice span { min-width: 92px; justify-content: center; font-variant-numeric: tabular-nums; }
-  .games .choice input:checked + span { background: var(--amber); }
-  @media (prefers-reduced-motion: no-preference) {
-    .games:not([hidden]) { animation: pop .3s ease-out both; }
+  @media (max-width: 639px) {
+    .app.ui { grid-template-rows: minmax(0, 1fr); }
+    .app > .app__pane--list { display: none; }
+    .app > .app__pane + .app__pane { border-top: 0; }
+    .iv-open { padding: 18px; }
+    .iv-open > .iv-card { display: none; }
   }
 
-  .done {
-    background: var(--night-2); border: 1.5px solid var(--amber); border-radius: 22px;
-    padding: 28px;
-  }
-  .done h3 { font-family: var(--display); font-weight: 800; font-size: 24px; margin: 0 0 8px; color: var(--amber); }
-  .done p { margin: 0; color: var(--cream); }
+  /* steps: one piece per panel */
+  #steps .panel { --p-h: 300px; background: #1b2335; }
+  #steps .panel .iv-card { background: #121826; }
+  .iv-step { position: absolute; left: 24px; right: 24px; top: 32px; display: grid; gap: 10px; }
+  @media (max-width: 639px) { #steps .panel { --p-h: 200px; } .iv-step { top: 16px; left: 16px; right: 16px; } }
 
-  footer { padding: 36px 0 48px; border-top: 1px solid var(--line); color: var(--mist); font-size: 14px; }
-  footer p { margin: 0 0 6px; }
-
-  /* The one orchestrated moment: the chat plays out on load */
-  @media (prefers-reduced-motion: no-preference) {
-    .bubble, .meta { animation: pop .45s cubic-bezier(.2,.9,.3,1.2) both; }
-    .bubble.in { animation-delay: .15s; }
-    .meta.in { animation-delay: .35s; }
-    .bubble.out { animation-delay: 1.1s; }
-    .meta.out { animation-delay: 1.3s; }
-    @keyframes pop {
-      from { opacity: 0; transform: translateY(10px) scale(.96); }
-      to { opacity: 1; transform: none; }
-    }
-  }
-
-  .hero { display: flex; flex-direction: column; }
-  .thread { order: -1; }
-  .duo { display: flex; flex-direction: column; gap: 56px; }
-  .signup-intro p { color: var(--mist); margin: -12px 0 28px; }
-
-  @media (min-width: 720px) {
-    .hero { padding-block: 64px 80px; }
-    section { padding: 72px 0; }
-    .interest { grid-template-columns: 220px 1fr; gap: 24px; align-items: baseline; }
-  }
-
-  @media (min-width: 1000px) {
-    .wrap { max-width: 1180px; padding: 0 48px; }
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
-      gap: 72px;
-      align-items: center;
-      padding-block: 72px 104px;
-    }
-    .thread { order: 0; margin: 0; }
-    h1 { font-size: 58px; }
-    .lead { font-size: 20px; }
-    .duo { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 96px; align-items: start; }
-    .duo-chat { padding-top: 8px; }
-    .interest { grid-template-columns: 200px 1fr; }
-    .signup-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 96px; align-items: start; }
-    .signup-intro h2 { font-size: 40px; }
-    .signup-intro p { margin: 0; font-size: 18px; max-width: 22em; }
-  }
-  .join { display: grid; gap: 28px; }
-  .join-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; counter-reset: step; }
-  .join-steps li { counter-increment: step; display: grid; grid-template-columns: 44px 1fr; column-gap: 14px; }
-  .join-steps li::before { content: counter(step); grid-row: span 2; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--amber); color: var(--amber); display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 800; }
-  .join-steps strong { font-size: 18px; }
-  .join-steps span { color: var(--mist); }
-  .join-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-  .btn.ghost { background: transparent; color: var(--cream); border: 1.5px solid var(--line); }
-  .btn.ghost:hover { border-color: var(--cream); background: transparent; color: var(--cream); }
+  /* safety: the profile another participant sees, on the inverse band */
+  .iv-profile { position: absolute; left: 56px; top: 56px; right: 56px; }
+  .iv-profile .iv-card { padding: 28px; gap: 18px; font-size: 17px; }
+  @media (max-width: 639px) { .iv-profile { left: 16px; top: 16px; width: calc(100% - 32px); } }
 </style>
 </head>
 <body>
-
-<div class="sun">
-<header class="wrap top">
-  <a class="brand" href="/" aria-label="Идваш ли? Начало">
-    <svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#121826"/><text x="150" y="160" text-anchor="middle" font-family="Unbounded, sans-serif" font-weight="800" font-size="150" fill="#FFB547">?</text></svg>
-    <span>Идваш ли?</span>
-  </a>
-</header>
-  <div class="wrap hero">
-    <div class="hero-text">
-      <h1>Компания в София за бизнес, спорт, гейминг, коли и наргиле</h1>
-      <p class="lead">Избираш какво те вълнува, от трейдинг и маркетинг до PS5 турнири, и идваш на сбирка с проверени хора от твоя квартал.</p>
-      <a class="btn" href="/app.html#signup">Регистрирай се</a>
-    </div>
-    <div class="thread" aria-hidden="true">
-      <div class="bubble in">Идваш ли довечера на наргиле?</div>
-      <div class="meta in">Сбирка в Студентски град, 20:00</div>
-      <div class="bubble out">Идвам!</div>
-      <div class="meta out">Ти</div>
-    </div>
-  </div>
-</div>
-<main>
-
-  <section aria-labelledby="interesi">
-    <div class="wrap duo">
-      <div class="duo-chat">
-        <h2 id="kak" class="visually-hidden">Как става</h2>
-        <div class="chat">
-          <p class="msg out">Как става?</p>
-          <p class="msg in">Регистрираш се, минаваш проверка със селфи и избираш какво те вълнува.</p>
-          <p class="msg in">Виждаш сбирките по твоя интерес: къде, кога и колко души идват.</p>
-          <p class="msg in">Натискаш „Идвам“. Сбирките са на публични места, само за проверени профили над 18 години.</p>
+<!-- type: software (a phone app for meeting people by interest, run as a web app)
+     deal: hero triptych, nav nav-mega, close close-type, footer footer-dark, rhythm dark-band, buttons arrow, mark arc (replaced by the client's own logo), grounds paper/topglow not used (the client's own dark ground), effect grain-gradient not used (see report)
+     palette: the client's own colours through start.mjs brand: the night ground and the amber of the speech-bubble logo; type urbanist
+     moments: word-highlight in #statement -->
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Към съдържанието</a>
+    <a class="nav__logo" href="#top"><svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#FFB547"/><text x="150" y="160" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-weight="800" font-size="150" fill="#121826">?</text></svg>Идваш ли?</a>
+    <nav class="nav__links" aria-label="Основно меню">
+      <div class="nav__item">
+        <a class="nav__link" href="#app">Сбирки <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav__menu">
+          <div class="wrap grid">
+            <div class="menu-col span-3">
+              <p class="t-label">Излизане</p>
+              <a href="#app">Наргиле и чил<span>Вечер в наргиле бар</span></a>
+              <a href="#app">Бар и бира<span>Маса с хора от блока</span></a>
+              <a href="#app">Билярд и боулинг<span>Игра с нови хора</span></a>
+            </div>
+            <div class="menu-col span-3">
+              <p class="t-label">Спорт и игри</p>
+              <a href="#app">Футбол<span>Отбор за мача</span></a>
+              <a href="#app">Гейминг и PlayStation<span>FIFA и турнири</span></a>
+              <a href="#app">Бизнес и пари<span>Трейдинг и първи клиенти</span></a>
+            </div>
+            <a class="menu-card span-3 start-10" href="#steps">
+              <div class="panel"><div class="iv" style="position:absolute;left:16px;right:16px;top:16px"><div class="iv-push"><span class="iv-push__icon"><svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#FFB547"/></svg></span><span><b>Идваш ли? 🔥</b><small>Има компания за наргиле в петък</small></span></div></div></div>
+              <span class="t-card">Известия на телефона</span>
+              <span class="t-small muted">Без приложение от магазина</span>
+            </a>
+          </div>
         </div>
       </div>
-      <div class="duo-list">
-        <h2 id="interesi">С какво започваме</h2>
-        <div class="interests">
-          <div class="interest"><h3>Бизнес и пари</h3><p>За студенти, които искат да изкарват пари: трейдинг, маркетинг, онлайн бизнес, първи клиенти. Срещаш хора, които вече го правят.</p></div>
-          <div class="interest"><h3>Спорт</h3><p>Футбол, баскетбол, волейбол или фитнес с хора, които търсят отбор или партньор за тренировка.</p></div>
-          <div class="interest"><h3>Наргиле и чил</h3><p>Спокойни вечери в наргиле барове, без да се чудиш с кого да излезеш.</p></div>
-          <div class="interest"><h3>Коли</h3><p>Срещи с хора, които живеят с колите си. Разговори, проекти, кафе след това.</p></div>
-          <div class="interest"><h3>Гейминг</h3><p>Вечери в гейминг клубове с хора, които играят същото като теб.</p></div>
+      <div class="nav__item"><a class="nav__link" href="#steps">Стъпки</a></div>
+      <div class="nav__item"><a class="nav__link" href="#safety">Сигурност</a></div>
+      <div class="nav__item"><a class="nav__link" href="#faq">Въпроси</a></div>
+      <div class="nav__item"><a class="nav__link" href="/app.html">Вход</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="/app.html#signup">Регистрирай се</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Меню">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero hero--triptych" data-enter aria-labelledby="hero-h">
+    <div class="wrap"><div class="hero-text grid hero__grid">
+      <div class="span-3">
+        <h1 id="hero-h">Сбирки по интереси в София</h1>
+        <p class="hero__lead">Избираш от 35 интереса, натискаш „Идвам“ и виждаш кой още идва. Само проверени профили над 18 години, на публични места в Студентски град.</p>
+      </div>
+      <div class="ly-collage span-6 start-4 iv" role="img" aria-label="Сбирка за наргиле в петък с 4 записани, известие на телефона и проверен профил в приложението Идваш ли?">
+        <div class="ly-collage__set is-on">
+          <div class="ly-piece iv-piece" style="left: 4%; top: 4%; width: 80%">
+            <div class="iv-card">
+              <div class="iv-when">петък, 20:00</div>
+              <div class="iv-tags"><span class="iv-tag iv-tag--on">Наргиле и чил</span><span class="iv-tag">Смесена група</span></div>
+              <div><b style="font-weight:500">Наргиле бар</b><br><span class="iv-muted">Студентски град</span></div>
+              <div class="iv-people"><span class="iv-person"><span class="iv-av a1">И</span>21 г.</span><span class="iv-person"><span class="iv-av a2">Н</span>20 г.</span><span class="iv-person"><span class="iv-av a3">Г</span>22 г.</span><span class="iv-person"><span class="iv-av a5">Ти</span>19 г.</span></div>
+              <div class="iv-row"><span>Идват: <b style="font-weight:500">4 от 6</b></span><span class="iv-btn">Идвам</span></div>
+            </div>
+          </div>
+          <div class="ly-piece iv-piece iv-chat" style="left: 44%; top: 66%; width: 52%">
+            <div class="iv-bubble iv-bubble--in">Идваш ли довечера на наргиле?</div>
+            <div class="iv-bubble iv-bubble--out">Идвам!</div>
+          </div>
+        </div>
+        <div class="ly-collage__set" aria-hidden="true">
+          <div class="ly-piece iv-piece" style="left: 4%; top: 6%; width: 80%">
+            <div class="iv-push"><span class="iv-push__icon"><svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#FFB547"/></svg></span><span><b>Идваш ли? 🔥</b><small>Намерихме ти компания: Футбол, събота в 11:00. Идват 7 от 10.</small></span></div>
+          </div>
+          <div class="ly-piece iv-piece" style="left: 16%; top: 34%; width: 80%">
+            <div class="iv-card">
+              <b style="font-weight:500">Какво те интересува?</b>
+              <div class="iv-tags"><span class="iv-tag iv-tag--on">Футбол</span><span class="iv-tag">Фитнес</span><span class="iv-tag iv-tag--on">Наргиле и чил</span><span class="iv-tag">Бар и бира</span><span class="iv-tag iv-tag--on">Гейминг и PlayStation</span><span class="iv-tag">Коли</span><span class="iv-tag">Планина и преходи</span><span class="iv-tag">Бизнес и пари</span></div>
+              <span class="iv-muted" style="font-size:13px">Избрани 3 от най-много 8</span>
+            </div>
+          </div>
+        </div>
+        <div class="ly-collage__set" aria-hidden="true">
+          <div class="ly-piece iv-piece" style="left: 4%; top: 4%; width: 62%">
+            <div class="iv-card">
+              <b style="font-weight:500">Проверка със селфи</b>
+              <div class="iv-selfie" aria-hidden="true">👍</div>
+              <span>Жест: <b style="font-weight:500">вдигнат палец</b></span>
+              <span class="iv-wait">Чака проверка</span>
+            </div>
+          </div>
+          <div class="ly-piece iv-piece" style="left: 34%; top: 74%; width: 62%">
+            <div class="iv-card">
+              <div class="iv-row" style="justify-content:start"><span class="iv-av a2 iv-av--lg">Н</span><span><b style="font-weight:500">Профилът е проверен</b><br><span class="iv-ok">✓ Можеш да се записваш</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="span-3 start-10 hero__cta"><a class="btn btn--primary" href="/app.html#signup">Регистрирай се<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
+    </div></div>
+  </section>
+
+  <section class="section" id="app" aria-labelledby="app-h">
+    <div class="wrap">
+      <div class="grid grid--top">
+        <h2 id="app-h" class="span-5">Сбирките по твоите интереси на един екран</h2>
+        <p class="span-6 start-7 muted">Отляво са сбирките с час, място и свободни места. Отваряш една и виждаш кой идва: малко име, години, снимка и интереси. <a class="link" href="#steps">Виж стъпките</a></p>
+      </div>
+      <div class="ui app fill iv" role="img" aria-label="Приложението Идваш ли?: списък със сбирки отляво и отворената сбирка за наргиле с 4 записани отдясно">
+        <div class="app__pane app__pane--list">
+          <div class="iv-bar">Предстоящи сбирки <span class="iv-muted" style="margin-left:auto;font-weight:400">Студентски град</span></div>
+          <div class="iv-list">
+            <div class="iv-li is-open"><b>Наргиле и чил</b><span>Наргиле бар · петък, 20:00</span><span class="iv-chip iv-chip--mine">Записан си</span></div>
+            <div class="iv-li"><b>Футбол</b><span>Игрище · събота, 11:00</span><span class="iv-chip">3 места</span></div>
+            <div class="iv-li"><b>Гейминг и PlayStation</b><span>Гейминг клуб · събота, 18:00</span><span class="iv-chip">2 места</span></div>
+            <div class="iv-li"><b>Бар и бира</b><span>Бирария · събота, 21:00</span><span class="iv-chip iv-chip--full">Пълна</span></div>
+            <div class="iv-li"><b>Бизнес и пари</b><span>Кафене · неделя, 17:00</span><span class="iv-chip">5 места</span></div>
+            <div class="iv-li"><b>Билярд и боулинг</b><span>Билярд зала · неделя, 19:00</span><span class="iv-chip">4 места</span></div>
+            <div class="iv-li"><b>Фитнес</b><span>Фитнес зала · понеделник, 8:00</span><span class="iv-chip">2 места</span></div>
+            <div class="iv-li"><b>Коли</b><span>Паркинг · вторник, 20:00</span><span class="iv-chip">6 места</span></div>
+            <div class="iv-li"><b>Планина и преходи</b><span>Витоша · неделя, 9:00</span><span class="iv-chip">8 места</span></div>
+          </div>
+        </div>
+        <div class="app__pane app__pane--open">
+          <div class="iv-open">
+            <div class="iv-tags"><span class="iv-tag iv-tag--on">Наргиле и чил</span><span class="iv-tag">Смесена група</span><span class="iv-tag">Записан си</span></div>
+            <h3>петък, 20:00 · Наргиле бар</h3>
+            <span class="iv-muted">Студентски град</span>
+            <div class="iv-row"><span>Идват: <b style="font-weight:500">4 от 6</b></span><span class="iv-btn iv-btn--ghost">Няма да дойда</span></div>
+            <div class="iv-people">
+              <span class="iv-person"><span class="iv-av a1 iv-av--lg">И</span>21 г.</span>
+              <span class="iv-person"><span class="iv-av a2 iv-av--lg">Н</span>20 г.</span>
+              <span class="iv-person"><span class="iv-av a3 iv-av--lg">Г</span>22 г.</span>
+              <span class="iv-person"><span class="iv-av a5 iv-av--lg">Ти</span>19 г.</span>
+            </div>
+            <div class="iv-card" style="margin-top:6px">
+              <div class="iv-row" style="justify-content:start;gap:14px"><span class="iv-av a2 iv-av--lg">Н</span><span><b style="font-weight:500">Н., 20 г.</b> <span class="iv-ok">✓ проверен</span><br><span class="iv-muted">Наргиле и чил · Футбол · Музика и концерти</span></span></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section aria-labelledby="join-title" id="zapis">
-    <div class="wrap signup-grid">
-      <div class="signup-intro">
-        <h2 id="join-title">Как да се присъединиш</h2>
-        <p>Отнема няколко минути. Всеки профил минава проверка, за да знаеш, че на сбирката идват истински хора.</p>
+  <section class="section" id="steps" style="--hm: 2" aria-labelledby="steps-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="steps-h">Влизаш в 3 стъпки. <span class="muted">После само натискаш „Идвам“.</span></h2>
       </div>
-      <div class="join">
-        <ol class="join-steps">
-          <li><strong>Регистрация</strong><span>Имейл, парола, кратък профил с интересите ти и твоя снимка.</span></li>
-          <li><strong>Проверка със селфи</strong><span>Правиш селфи с жест, който ти даваме. Организаторът го сравнява с профилната ти снимка и селфито се изтрива.</span></li>
-          <li><strong>„Идвам“</strong><span>Избираш сбирка по интерес и дата, натискаш един бутон и виждаш кой още идва.</span></li>
-        </ol>
-        <div class="join-actions">
-          <a class="btn" href="/app.html#signup">Регистрирай се</a>
-          <a class="btn ghost" href="/app.html">Вход</a>
+      <div class="grid">
+        <article class="card card--row card--open span-4">
+          <span class="step-num">1</span>
+          <h3>Направи профил с интересите си</h3>
+          <p>Имейл, парола, твоя снимка и до 8 интереса от списъка.</p>
+          <div class="panel"><div class="ui iv iv-step" role="img" aria-label="Екран от приложението Идваш ли?">
+            <div class="iv-field"><small>Имейл</small>ivan@abv.bg</div>
+            <div class="iv-tags"><span class="iv-tag iv-tag--on">Наргиле и чил</span><span class="iv-tag iv-tag--on">Футбол</span><span class="iv-tag">Коли</span><span class="iv-tag">Фитнес</span></div>
+            <div class="iv-row"><span class="iv-av a1">И</span><span class="iv-btn">Запази профила</span></div>
+          </div></div>
+        </article>
+        <article class="card card--row card--open span-4">
+          <span class="step-num">2</span>
+          <h3>Мини проверката със селфи</h3>
+          <p>Снимаш се с жест, който ти даваме. Селфито се изтрива след проверката.</p>
+          <div class="panel"><div class="ui iv iv-step" role="img" aria-label="Екран от приложението Идваш ли?">
+            <div class="iv-card"><span>Жест: <b style="font-weight:500">знак V с два пръста</b></span><div class="iv-selfie" aria-hidden="true">✌️</div><span class="iv-ok">✓ Профилът е проверен</span></div>
+          </div></div>
+        </article>
+        <article class="card card--row card--open span-4">
+          <span class="step-num">3</span>
+          <h3>Натисни „Идвам“ на сбирка</h3>
+          <p>Виждаш кой още идва и получаваш известие на телефона.</p>
+          <div class="panel"><div class="ui iv iv-step" role="img" aria-label="Екран от приложението Идваш ли?">
+            <div class="iv-push"><span class="iv-push__icon"><svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#FFB547"/></svg></span><span><b>Идваш ли? 🔥</b><small>Записан си: Наргиле и чил, петък в 20:00</small></span></div>
+            <div class="iv-row"><span>Идват: <b style="font-weight:500">5 от 6</b></span><span class="iv-btn">Идвам</span></div>
+          </div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section statement" id="statement" data-moment="word-highlight" aria-label="Защо">
+    <div class="wrap">
+      <p class="t-label">Защо „Идваш ли?“</p>
+      <p class="mo-wh__text">В Студентски град излизаш само ако приятелите ти са свободни. „Идваш ли?“ събира непознати с <strong>един и същи интерес</strong> на маса в заведение, а ти решаваш дали да дойдеш и с кого.</p>
+    </div>
+  </section>
+
+  <section class="section ground-inverse" id="safety" aria-labelledby="safety-h">
+    <div class="wrap">
+      <div class="grid grid--top">
+        <div class="span-5 split-col">
+          <h2 id="safety-h">Профилът ти виждат само хората от сбирката</h2>
+          <p class="t-lead">Записаните виждат малкото ти име, годините, снимката и интересите, докато сбирката предстои. Около 3 часа след началото профилът спира да се вижда.</p>
+          <p>Телефона, фамилията и квартала вижда само организаторът.</p>
+          <p>Instagram се показва само ако го разрешиш.</p>
+          <p><a class="link" href="/privacy.html">Прочети поверителността</a></p>
+        </div>
+        <div class="frame frame--split span-6 start-7" style="background:#121826">
+          <div class="ui iv iv-profile" role="img" aria-label="Профил на участник, както го виждат другите от сбирката">
+            <div class="iv-card">
+              <div class="iv-row" style="justify-content:start;gap:16px"><span class="iv-av a4 iv-av--lg">М</span><span><b style="font-weight:500;font-size:20px">М., 20 г.</b><br><span class="iv-ok">✓ Проверен профил</span></span></div>
+              <div class="iv-tags"><span class="iv-tag">Наргиле и чил</span><span class="iv-tag">Танци</span><span class="iv-tag">Музика и концерти</span></div>
+              <div class="iv-field"><small>Instagram</small>Скрит</div>
+              <div class="iv-field"><small>Телефон, фамилия, квартал</small>Вижда ги само организаторът</div>
+              <span class="iv-muted" style="font-size:13px">Видим до петък, 23:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="grid grid--top">
+        <div class="span-5">
+          <h2 id="faq-h">Въпроси</h2>
+          <p class="muted">Нещо друго? Пиши ни в Instagram.</p>
+        </div>
+        <div class="faq span-6 start-7">
+          <div class="faq__item"><h3>Кой може да се запише?</h3><p>Проверени профили над 18 години. Проверката е със селфи и става ръчно.</p></div>
+          <div class="faq__item"><h3>Къде са сбирките?</h3><p>На публични места: заведения, зали и игрища в Студентски град.</p></div>
+          <div class="faq__item"><h3>Ако не ми хареса компанията?</h3><p>Натискаш „Няма да дойда“ преди сбирката и мястото ти се освобождава.</p></div>
+          <div class="faq__item"><h3>Кой вижда селфито ми?</h3><p>Само организаторът. Изтрива се веднага след проверката.</p></div>
+          <div class="faq__item"><h3>Как да изтрия профила си?</h3><p>От профила: „Изтрий профила“ трие данните и записванията веднага.</p></div>
+          <div class="faq__item"><h3>Трябва ли да свалям приложение?</h3><p>Не. Сайтът се слага на началния екран на телефона и праща известия.</p></div>
         </div>
       </div>
     </div>
   </section>
 </main>
 
-<footer>
+<footer class="footer closing footer--dark ground-inverse" id="contact" aria-labelledby="close-h">
   <div class="wrap">
-    <p>Идваш ли? Сбирки по интереси в София.</p>
-    <p>Пиши ни в Instagram: <a href="https://www.instagram.com/idvashli.sofia/" target="_blank" rel="noopener">@idvashli.sofia</a></p>
-    <p><a href="/privacy.html">Поверителност</a></p>
-    <p>© 2026 Идваш ли?</p>
+    <div class="closing__cta close--type">
+      <div class="section-head">
+        <h2 id="close-h">Намери компания за тази седмица</h2>
+        <p>Регистрацията е с имейл и отнема няколко минути.</p>
+      </div>
+      <a class="btn btn--primary btn--xl btn--wide" href="/app.html#signup">Регистрирай се<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+    </div>
+    <div class="closing__links">
+      <div class="grid">
+        <div class="span-4 stack-4">
+          <a class="nav__logo" href="#top"><svg viewBox="0 0 300 260" aria-hidden="true"><path d="M70 10H230A60 60 0 0 1 290 70V140A60 60 0 0 1 230 200H125L70 250L82 200H70A60 60 0 0 1 10 140V70A60 60 0 0 1 70 10Z" fill="#FFB547"/><text x="150" y="160" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-weight="800" font-size="150" fill="#121826">?</text></svg>Идваш ли?</a>
+          <p class="footer__lede">Сбирки по интереси за студентите в София.</p>
+        </div>
+        <div class="span-2 footer__col"><h3>Сайт</h3><ul><li><a href="#app">Сбирки</a></li><li><a href="#steps">Стъпки</a></li><li><a href="#safety">Сигурност</a></li><li><a href="#faq">Въпроси</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Профил</h3><ul><li><a href="/app.html#signup">Регистрация</a></li><li><a href="/app.html">Вход</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Анкета</h3><ul><li><a href="/anketa">Попълни анкетата</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Контакт</h3><ul><li><a href="https://www.instagram.com/idvashli.sofia/">Instagram</a></li></ul></div>
+      </div>
+      <div class="footer__legal">
+        <span>&copy; 2026 Идваш ли? &nbsp; <a href="/privacy.html">Поверителност</a></span>
+      </div>
+    </div>
   </div>
 </footer>
 
@@ -338,5 +422,12 @@
     location.replace('/app.html' + location.hash);
   }
 </script>
+<nav class="actionbar" aria-label="Бързи действия">
+  <a class="btn btn--primary" href="/app.html#signup">Регистрирай се</a>
+</nav>
+
+<script type="module" src="/kit/system.js"></script>
+<script type="module" src="/kit/motion/motion.js"></script>
+<script type="module" src="/kit/layout/layout.js"></script>
 </body>
 </html>
