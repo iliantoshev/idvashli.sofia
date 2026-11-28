@@ -4,6 +4,7 @@ import {
 } from '@netlify/identity';
 import { esc, api, postJson, formatWhen, authMessage, $, $$ } from './ui.js';
 import { INTEREST_GROUPS, NICHES, MAX_INTERESTS } from '../lib/interests.mjs';
+import { mountPwa } from './pwa.js';
 
 
 const root = $('#app');
@@ -501,9 +502,11 @@ async function renderMeetups(message = '', silent = false) {
   render(`
     <h1>Сбирки</h1>
     ${message ? `<p class="success">${esc(message)}</p>` : ''}
+    <div id="pwa-slot"></div>
     <p class="error" id="rsvp-error" role="alert"></p>
     <div class="list">${cards || '<div class="card"><p>Още няма обявени сбирки. Ще ти се обадим, щом има по твоя интерес.</p></div>'}</div>
   `);
+  mountPwa($('#pwa-slot'), { dismissible: true });
 
   $$('[data-rsvp]').forEach((b) => b.addEventListener('click', async () => {
     b.disabled = true;
@@ -600,6 +603,8 @@ async function renderProfile() {
       </div>
     </div>
 
+    <div id="pwa-slot"></div>
+
     ${verified ? `
       <h2 class="section-title">Моите сбирки</h2>
       ${mine.length
@@ -618,6 +623,7 @@ async function renderProfile() {
   `);
 
   $('#edit').addEventListener('click', () => renderProfileForm(me.profile, true));
+  mountPwa($('#pwa-slot'));
   $('#edit-photo').addEventListener('click', () => renderPhoto(true));
   $('#logout-2').addEventListener('click', doLogout);
   setupDelete();

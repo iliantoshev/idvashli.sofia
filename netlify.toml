@@ -25,3 +25,14 @@
   for = "/venue.html"
   [headers.values]
     X-Robots-Tag = "noindex"
+
+# Service worker-ът трябва винаги да е последната версия
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
