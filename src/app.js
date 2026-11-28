@@ -48,6 +48,23 @@ function setTopActions(loggedIn) {
 
 /* ---------- Вход и регистрация ---------- */
 
+// "Запомни ме": по подразбиране оставаш влязъл, докато не натиснеш "Изход".
+// Без отметката те изваждаме, когато затвориш браузъра или приложението.
+const NO_REMEMBER = 'idvashli-no-remember';
+const ALIVE = 'idvashli-alive';
+function rememberOn() {
+  try { return localStorage.getItem(NO_REMEMBER) !== '1'; } catch { return true; }
+}
+function setRemember(on) {
+  try {
+    if (on) localStorage.removeItem(NO_REMEMBER);
+    else { localStorage.setItem(NO_REMEMBER, '1'); sessionStorage.setItem(ALIVE, '1'); }
+  } catch { /* няма достъп до паметта на браузъра */ }
+}
+function sessionExpired() {
+  try { return localStorage.getItem(NO_REMEMBER) === '1' && !sessionStorage.getItem(ALIVE); } catch { return false; }
+}
+
 function renderAuth(mode = location.hash === '#signup' ? 'signup' : 'login', notice = '') {
   setTopActions(false);
   setView('auth');
@@ -62,16 +79,17 @@ function renderAuth(mode = location.hash === '#signup' ? 'signup' : 'login', not
     <form id="auth-form" novalidate>
       <div class="field">
         <label for="email">Имейл</label>
-        <input type="email" id="email" autocomplete="email" required>
+        <input type="email" id="email" name="email" autocomplete="username" inputmode="email" autocapitalize="off" required>
       </div>
       <div class="field">
         <label for="password">Парола ${isSignup ? '<span class="hint">(поне 8 символа)</span>' : ''}</label>
-        <input type="password" id="password" autocomplete="${isSignup ? 'new-password' : 'current-password'}" minlength="8" required>
+        <input type="password" id="password" name="password" autocomplete="${isSignup ? 'new-password' : 'current-password'}" minlength="8" required>
       </div>
       ${isSignup ? `<div class="field">
         <label for="password2">Повтори паролата</label>
         <input type="password" id="password2" autocomplete="new-password" minlength="8" required>
       </div>` : ''}
+      ${isSignup ? '' : `<label class="check remember"><input type="checkbox" id="remember" ${rememberOn() ? 'checked' : ''}><span>Запомни ме</span></label>`}
       <p class="error" id="auth-error" role="alert"></p>
       <div class="actions">
         <button class="btn" type="submit">${isSignup ? 'Създай профил' : 'Влез'}</button>
@@ -129,6 +147,7 @@ function renderAuth(mode = location.hash === '#signup' ? 'signup' : 'login', not
         if (await getUser().catch(() => null)) return start();
         renderAuth('login', 'Изпратихме ти имейл. Отвори линка в него, за да потвърдиш профила, и после влез тук.');
       } else {
+        setRemember($('#remember')?.checked !== false);
         await login(email, password);
         start();
       }
@@ -732,6 +751,10 @@ setInterval(async () => {
 
 async function start() {
   try {
+    if (sessionExpired()) {
+      await logout().catch(() => {});
+      return renderAuth('login');
+    }
     const user = await getUser();
     if (!user) return renderAuth();
     me = await api('/api/me');

@@ -277,3 +277,5 @@ body[data-view="profile"] #app > .card { margin-bottom: 0; }
 .ios-steps { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
 .share-ico { width: 1.1em; height: 1.1em; vertical-align: -0.15em; color: #3B82F6; }
 #pwa-slot:empty { display: none; }
+
+.remember { margin: 4px 0 8px; }
