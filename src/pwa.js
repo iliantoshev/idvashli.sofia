@@ -92,9 +92,11 @@ export async function mountPwa(slot, { dismissible = false } = {}) {
     } else if (s.step === 'ios-install') {
       inner = `<p>Сложи „Идваш ли?“ на телефона си като приложение, за да получаваш известия:</p>
         <ol class="ios-steps">
-          <li>Натисни ${SHARE_ICON} <strong>„Сподели“</strong> долу в Safari</li>
-          <li>Избери <strong>„Добави към началния екран“</strong> и после <strong>„Добави“</strong></li>
-          <li>Отвори сайта от новата иконка и включи известията</li>
+          <li>Натисни ${SHARE_ICON} <strong>„Сподели“</strong> (Share). Ако не го виждаш, първо натисни <strong>„⋯“</strong></li>
+          <li>Натисни <strong>„View More“</strong> (Виж още) със стрелката надолу</li>
+          <li>Избери <strong>„Add to Home Screen“</strong> (Добави към началния екран)</li>
+          <li>Остави <strong>„Open as Web App“</strong> включено и натисни <strong>„Add“</strong></li>
+          <li>Отвори „Идваш ли?“ от новата иконка, влез и включи известията</li>
         </ol>
         ${dismissible ? '<div class="actions"><button class="btn ghost small" type="button" data-pwa="later">Не сега</button></div>' : ''}`;
     } else if (s.step === 'push') {
